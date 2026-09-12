@@ -72,6 +72,13 @@ let SPL: any = null;
 let TIP_KP: any = null;
 let TIP_ADDRESS = '';
 
+const B58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+function b58encode(data: number[]): string {
+  let n = 0n; for (const b of data) n = n * 256n + BigInt(b);
+  let out = ''; while (n > 0n) { const r = n % 58n; out = B58[Number(r)] + out; n /= 58n; }
+  let pad = 0; for (const b of data) { if (b === 0) pad++; else break; }
+  return '1'.repeat(pad) + out;
+}
 async function initDesk(): Promise<boolean> {
   if (TIP_KP) return true;
   const raw = Deno.env.get('TG_TIP_KEY') || '';
@@ -79,10 +86,20 @@ async function initDesk(): Promise<boolean> {
   try {
     const arr = JSON.parse(raw);
     if (!Array.isArray(arr) || arr.length < 64) return false;
-    WEB3 = await import('https://esm.sh/@solana/web3.js@1.95.3?dts');
-    SPL = await import('https://esm.sh/@solana/spl-token@0.4.9?dts');
-    TIP_KP = WEB3.Keypair.fromSecretKey(new Uint8Array(arr.slice(0, 64)));
-    TIP_ADDRESS = TIP_KP.publicKey.toBase58();
+    TIP_KP = { secret: arr.slice(0, 64) };  // keypair materialized lazily in loadChainLibs
+    TIP_ADDRESS = b58encode(arr.slice(32, 64));
+    return true;
+  } catch { return false; }
+}
+/* v8: chain libs loaded ONLY on on-chain ops (withdraw/credit) — web3.js without ?dts
+   keeps the isolate under the Supabase memory ceiling; health/tips/trades stay light. */
+async function loadChainLibs(): Promise<boolean> {
+  if (!TIP_KP) return false;
+  if (TIP_KP.publicKey) return true;
+  try {
+    WEB3 = await import('https://esm.sh/@solana/web3.js@1.95.3');
+    SPL = await import('https://esm.sh/@solana/spl-token@0.4.9');
+    TIP_KP = WEB3.Keypair.fromSecretKey(new Uint8Array(TIP_KP.secret));
     return true;
   } catch { return false; }
 }
@@ -292,6 +309,7 @@ async function cmdWithdraw(chatId: number | string, uid: string, parts: string[]
     return;
   }
   if (!(await initDesk())) { await reply(chatId, 'Treasury offline — withdrawals unavailable.'); return; }
+  if (!(await loadChainLibs())) { await reply(chatId, 'Chain libraries warming up — try again in a few seconds.'); return; }
   const w = await loadWallets();
   const me = walletOf(w, uid);
   if (!me.linked) { await reply(chatId, 'Set your withdrawal address first: /link &lt;solana-address&gt;'); return; }
@@ -562,7 +580,7 @@ async function cmdChat(chatId: number | string, uid: string, m: any, text: strin
 
 /* ---------------- entry ---------------- */
 Deno.serve(async (req: Request) => {
-  if (req.method !== 'POST') { const learned = await scanBrain(); return json({ ok: true, fn: 'tg-desk v4', treasury: !!(await initDesk()), learned }); }
+  if (req.method !== 'POST') { const learned = await scanBrain(); return json({ ok: true, fn: 'tg-desk v5', treasury: !!(await initDesk()), learned }); }
   let body: any = {};
   try { body = await req.json(); } catch { /* empty */ }
   const m = body.message;
