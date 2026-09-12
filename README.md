@@ -41,10 +41,20 @@ Auth header for reads: `Authorization: Bearer <anon jwt>` (publishable, embedded
 The published site at smc.kimi.page is updated from the Kimi app's site project
 (this repo is the canonical source — push here first, then publish from the app).
 
-1. Push changes to this repo.
-2. Open the smc.kimi.page site project in the Kimi app.
-3. Replace `index.html` + updated `os-*.js`/`os-*.css` files with this repo's versions.
-4. Publish.
+**Fast path — single-file bundle:** `smc-bundle-v543.html` is fully self-contained
+(all 55 modules inlined + artwork embedded as a data URI). Open the smc.kimi.page
+project in the Kimi app, paste the bundle content as `index.html`, publish. Done.
+Regenerate after edits with `python make_bundle.py`.
+
+**Module path:** Replace `index.html` + updated `os-*.js`/`os-*.css` files with
+this repo's versions.
+
+## Artwork
+
+`os-ext.css` / `os-calm.css` reference `assets/triad.jpg` (Smart Triad:
+bear / bull / flame). The binary is not in the repo — drop `assets/triad.jpg`
+in via the GitHub web UI (the bundle inlines it, so single-file deploys don't
+need it). Without it the shell falls back to solid `#05070f` — cosmetic only.
 
 ## Layout
 
