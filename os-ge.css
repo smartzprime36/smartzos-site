@@ -1,0 +1,42 @@
+/* ============ SmartzOS v3.4 — Grand Exchange + Triad City ============ */
+.ge-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid #1e2c4a;border-radius:10px;margin-bottom:6px;background:#0d1320;font-size:12px;cursor:pointer;transition:.15s}
+.ge-item:hover{border-color:#4fc9ff}
+.ge-item.sel{border-color:#e04fff;box-shadow:0 0 10px rgba(224,79,255,.25)}
+.ge-item .gi{flex:1}
+.ge-item .gp{font-family:monospace;font-weight:700;text-align:right}
+.ge-offer{border:1px solid #1e2c4a;border-radius:10px;padding:10px;margin-bottom:8px;background:#0d1320;font-size:12px}
+.ge-offer .bar{height:6px;background:#16203a;border-radius:4px;overflow:hidden;margin-top:8px}
+.ge-offer .bar>div{height:100%}
+.ge-slot{border:1px dashed #1e2c4a;border-radius:10px;padding:14px;text-align:center;color:#8b98ad;font-size:11px;margin-bottom:8px}
+.ge-buy>div{background:linear-gradient(90deg,#0fa874,#2ee6a8)}
+.ge-sell>div{background:linear-gradient(90deg,#a8443c,#ff5c6a)}
+.ge-in{display:flex;gap:6px;margin:8px 0}
+.ge-in input{flex:1;background:#0b101a;border:1px solid #1e2c4a;border-radius:8px;color:#e6ecf5;padding:9px 10px;font-size:13px;font-family:monospace;outline:none;min-width:0}
+.ge-in input:focus{border-color:#4fc9ff}
+.ge-log{font-family:monospace;font-size:11px;background:#0b101a;border:1px solid #1e2c4a;border-radius:10px;padding:10px;height:130px;overflow:auto;line-height:1.7;color:#8b98ad}
+.ge-log .b{color:#2ee6a8}.ge-log .s{color:#ff5c6a}
+/* CITY */
+.city-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.city-meta .cm{flex:1;min-width:90px;text-align:center;padding:8px;background:#0d1320;border:1px solid #1e2c4a;border-radius:10px}
+.city-meta .cm .v{font-size:16px;font-weight:800;font-family:monospace}
+.city-meta .cm .k{font-size:9px;color:#8b98ad;letter-spacing:.08em;margin-top:2px}
+.city-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:12px}
+.tile{aspect-ratio:1;background:#0d1320;border:1px solid #1e2c4a;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;transition:.15s;position:relative}
+.tile:hover{border-color:#4fc9ff;transform:scale(1.05)}
+.tile.empty{border-style:dashed;color:#2a3650;font-size:14px}
+.tile .lv{position:absolute;bottom:2px;right:4px;font-size:8px;color:#e8c15a;font-weight:800}
+.tile.boosted{border-color:rgba(232,193,90,.6);box-shadow:0 0 8px rgba(232,193,90,.25)}
+.bld-menu{display:flex;flex-wrap:wrap;gap:6px}
+.bld-opt{flex:1 1 30%;min-width:120px;border:1px solid #1e2c4a;border-radius:10px;padding:9px;background:#0d1320;cursor:pointer;font-size:11px;transition:.15s}
+.bld-opt:hover{border-color:#e04fff}
+.bld-opt.cant{opacity:.4;cursor:not-allowed}
+.bld-opt .bn{font-weight:700;font-size:12px;margin-bottom:3px}
+.bld-opt .bc{color:#e8c15a;font-family:monospace}
+.bld-opt .bd{color:#8b98ad;font-size:10px;margin-top:3px;line-height:1.4}
+.city-ticker{font-size:11px;color:#8b98ad;font-family:monospace;padding:8px;border:1px solid #1e2c4a;border-radius:8px;background:#0b101a;margin-top:10px;line-height:1.6}
+.syn-badge{font-size:9px;background:rgba(46,230,168,.12);color:#2ee6a8;border:1px solid rgba(46,230,168,.4);padding:1px 7px;border-radius:12px;font-weight:700}
+@media(max-width:768px){
+  .city-grid{gap:3px}
+  .tile{font-size:16px;border-radius:6px}
+  .bld-opt{min-width:46%}
+}

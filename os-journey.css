@@ -1,0 +1,61 @@
+/* SmartzOS v5.16 — Journey: stage-aware home, organic beginner→master flow */
+.jny-stage{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.jny-glyph{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:19px;flex-shrink:0;
+  background:linear-gradient(145deg,rgba(232,180,120,.18),rgba(232,180,120,.04));border:1px solid rgba(232,180,120,.35)}
+.jny-name{font-size:14px;font-weight:800;color:#e8e2d4;letter-spacing:.04em}
+.jny-sub{font-size:10px;color:#8b93a5;margin-top:1px}
+.jny-count{margin-left:auto;font-family:var(--mono,monospace);font-size:11px;color:var(--gold,#e8b478);font-weight:700}
+
+.jny-bar{height:6px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden;margin:8px 0 10px}
+.jny-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#c98a4b,#e8b478,#f4d9a8);
+  transition:width .8s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 10px rgba(232,180,120,.4)}
+
+.jny-next{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:12px;
+  background:rgba(232,180,120,.06);border:1px solid rgba(232,180,120,.25);cursor:pointer;transition:border-color .15s,transform .15s}
+.jny-next:hover{border-color:rgba(232,180,120,.55);transform:translateY(-1px)}
+.jny-next .jn-ic{font-size:21px;flex-shrink:0}
+.jny-next .jn-t{font-size:12px;font-weight:700;color:#f0ead9}
+.jny-next .jn-d{font-size:10px;color:#a9a294;margin-top:2px;line-height:1.45}
+.jny-next .jn-go{margin-left:auto;flex-shrink:0;padding:7px 13px;border-radius:10px;font-size:10.5px;font-weight:800;
+  color:#14100a;background:linear-gradient(135deg,#e8b478,#c98a4b);letter-spacing:.05em}
+.jny-mentor{margin-top:9px;font-size:10px;color:#8b93a5;font-style:italic;line-height:1.5}
+.jny-done{text-align:center;padding:8px 0 2px;font-size:12px;color:#e8b478;font-weight:700}
+
+/* coach strip — one contextual line under the widgets, rotates */
+#coachStrip{display:flex;align-items:center;gap:9px;padding:9px 13px;border-radius:13px;margin-top:4px;
+  background:rgba(16,18,26,.6);border:1px solid rgba(255,255,255,.07);backdrop-filter:blur(10px);
+  font-size:11px;color:#cfc9ba;cursor:pointer;transition:border-color .15s}
+#coachStrip:hover{border-color:rgba(232,180,120,.35)}
+#coachStrip .c-ava{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;flex-shrink:0;
+  background:linear-gradient(145deg,#2a2416,#171310);border:1px solid rgba(232,180,120,.4)}
+#coachStrip .c-arrow{margin-left:auto;color:#8b93a5;font-size:12px}
+
+/* stage-ordered folders animate softly when they re-rank */
+#osHome .oh-folders .oh-fold{transition:transform .3s}
+
+/* v8 TEST FLIGHT quest — Initiate track field-test card */
+.v8q{margin-top:12px;padding:11px 12px;border-radius:12px;background:#0d1320;border:1px solid #1e2c4a}
+.v8q-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.v8q-badge{font-family:var(--mono,monospace);font-size:10.5px;font-weight:800;letter-spacing:.08em;color:#2ee6a8}
+.v8q-kp{margin-left:auto;font-family:var(--mono,monospace);font-size:10px;font-weight:700;color:#e8c15a;
+  padding:3px 8px;border-radius:8px;border:1px solid rgba(232,193,90,.35);background:rgba(232,193,90,.07)}
+.v8q-desc{font-size:10px;color:#8b93a5;line-height:1.5;margin-bottom:8px}
+.v8q-step{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:9px;margin-bottom:4px;
+  background:rgba(255,255,255,.025);border:1px solid #1e2c4a}
+.v8q-step.done{border-color:rgba(46,230,168,.3)}
+.v8q-ic{font-size:14px;flex-shrink:0}
+.v8q-t{font-size:11px;color:#cfc9ba;line-height:1.35}
+.v8q-step.done .v8q-t{color:#8b93a5;text-decoration:line-through}
+.v8q-chk{margin-left:auto;font-size:12px;font-weight:800;color:#2ee6a8}
+.v8q-pend{margin-left:auto;flex-shrink:0;font-family:var(--mono,monospace);font-size:8.5px;letter-spacing:.06em;
+  color:#5c657a;padding:3px 7px;border-radius:7px;border:1px solid #1e2c4a}
+.v8q-mark{margin-left:auto;flex-shrink:0;font-family:var(--mono,monospace);font-size:8.5px;font-weight:800;
+  letter-spacing:.06em;color:#e04fff;padding:4px 8px;border-radius:7px;border:1px solid rgba(224,79,255,.4);
+  cursor:pointer;transition:border-color .15s}
+.v8q-mark:hover{border-color:#e04fff}
+.v8q-bar{height:4px;border-radius:3px;background:rgba(255,255,255,.06);overflow:hidden;margin-top:4px}
+.v8q-fill{height:100%;border-radius:3px;background:#2ee6a8;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.v8q-state{margin-top:7px;font-family:var(--mono,monospace);font-size:9.5px;letter-spacing:.06em;color:#8b93a5}
+.v8q-state.ok{color:#2ee6a8;font-weight:800}
+.v8q-state.go{color:#e8c15a;font-weight:700}
+.v8q-note{margin-top:5px;font-size:9px;color:#5c657a;font-style:italic}

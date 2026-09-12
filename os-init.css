@@ -1,0 +1,21 @@
+/* ============ SmartzOS v4.4 — Initiation Protocol ============ */
+#rankChip.verified{background:rgba(46,230,168,.12);border-color:#2ee6a8;color:#2ee6a8;box-shadow:0 0 14px rgba(46,230,168,.5);animation:vpulse 2s infinite}
+@keyframes vpulse{0%,100%{box-shadow:0 0 10px rgba(46,230,168,.4)}50%{box-shadow:0 0 22px rgba(46,230,168,.8)}}
+.desk-icon.resonating .glyph{animation:resGlow 1.6s infinite}
+@keyframes resGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(46,230,168,.6))}50%{filter:drop-shadow(0 0 16px rgba(46,230,168,1))}}
+.kp-chip{color:#ff5c6a;font-weight:700}
+.stake-box{border:1px solid rgba(79,201,255,.4);border-radius:12px;padding:14px;background:radial-gradient(300px 140px at 50% 0,rgba(79,201,255,.1),transparent)}
+.stake-box h4{color:#4fc9ff;text-shadow:0 0 10px rgba(79,201,255,.6)}
+.oc-box{border:1px solid rgba(224,79,255,.4);border-radius:12px;padding:14px;background:radial-gradient(300px 140px at 50% 0,rgba(224,79,255,.12),transparent)}
+.oc-box h4{color:#e04fff;text-shadow:0 0 10px rgba(224,79,255,.6)}
+.flash-mission{border:1px solid #ff5c6a;border-radius:12px;padding:12px 14px;margin-bottom:10px;background:radial-gradient(300px 120px at 50% 0,rgba(255,92,106,.12),transparent);animation:vpulse 1.5s infinite}
+.flash-mission .fm-t{font-weight:800;color:#ff5c6a;font-size:13px}
+.flash-mission .fm-d{font-size:11px;color:#8b98ad;margin-top:4px}
+.flash-mission .fm-timer{font-family:monospace;font-weight:800;color:#e8c15a;margin-top:6px;font-size:14px}
+.streak-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,92,106,.1);border:1px solid rgba(255,92,106,.5);color:#ff5c6a;padding:2px 10px;border-radius:14px;font-size:10px;font-weight:800}
+.init-step{display:flex;gap:10px;padding:10px;border:1px solid #1e2c4a;border-radius:10px;margin:8px 0;font-size:12px;background:#0d1320;cursor:pointer;transition:.15s;align-items:center}
+.init-step:hover{border-color:#ff5c6a;transform:translateX(4px)}
+.init-step.done{border-color:rgba(46,230,168,.5)}
+.init-step .n{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#a8443c,#7a2f2a);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0}
+.init-step.done .n{background:#0fa874}
+.init-step .kp-r{margin-left:auto;color:#ff5c6a;font-weight:800;font-size:11px;white-space:nowrap}

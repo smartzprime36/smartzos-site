@@ -1,0 +1,42 @@
+/* SmartzOS v5.19 — Arena */
+.ar-body{display:flex;flex-direction:column;gap:10px;padding:12px;overflow-y:auto}
+.ar-tabs{display:flex;gap:6px}
+.ar-tab{padding:6px 14px;border-radius:10px;border:1px solid var(--line,rgba(255,255,255,.1));background:transparent;
+  color:#a9a294;font-size:11px;font-weight:700;cursor:pointer}
+.ar-tab.on{border-color:var(--gold,#e8b478);color:var(--gold,#e8b478);background:rgba(232,180,120,.08)}
+.ar-credits{margin-left:auto;font-family:var(--mono,monospace);font-size:11px;color:#2ee6a8;align-self:center}
+.ar-card{border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:11px 13px;background:rgba(255,255,255,.03)}
+.ar-card h6{margin:0 0 8px;font-size:11px;color:#e8e2d4;letter-spacing:.06em}
+.ar-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.ar-row select,.ar-row input{background:rgba(255,255,255,.05);border:1px solid var(--line,rgba(255,255,255,.12));
+  color:#e8e2d4;border-radius:9px;padding:7px 10px;font-size:11px;outline:none}
+.ar-btn{padding:7px 14px;border-radius:10px;border:1px solid rgba(232,180,120,.35);background:rgba(232,180,120,.1);
+  color:var(--gold,#e8b478);font-size:11px;font-weight:800;cursor:pointer}
+.ar-btn:hover{background:rgba(232,180,120,.2)}
+.ar-btn.ghost{border-color:rgba(255,255,255,.14);background:transparent;color:#a9a294}
+.ar-duel{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:11px;border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.02);font-size:11px;color:#cfc9ba;margin-bottom:6px}
+.ar-duel .vs{color:#e8b478;font-weight:800}
+.ar-duel .st{margin-left:auto;font-size:9.5px;color:#6d7688}
+.ar-duel .win-tag{color:#2ee6a8;font-weight:800}
+.ar-duel .lose-tag{color:#e86a5f}
+.ar-empty{text-align:center;color:#6d7688;font-size:10.5px;padding:18px 8px}
+/* quiz overlay */
+.ar-quiz{position:absolute;inset:0;z-index:50;background:rgba(10,12,18,.97);display:none;flex-direction:column;
+  gap:10px;padding:16px;overflow-y:auto;border-radius:0 0 12px 12px}
+.ar-quiz.open{display:flex}
+.ar-q{border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:11px 13px}
+.ar-q .qq{font-size:12px;font-weight:700;color:#e8e2d4;margin-bottom:8px}
+.ar-opt{display:block;padding:8px 11px;border-radius:9px;border:1px solid rgba(255,255,255,.1);margin-bottom:5px;
+  font-size:11px;color:#cfc9ba;cursor:pointer}
+.ar-opt.sel{border-color:#e8b478;background:rgba(232,180,120,.1);color:#f0ead9}
+.ar-timer{font-family:var(--mono,monospace);font-size:11px;color:#ffb347;text-align:right}
+/* shop */
+.ar-shop{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ar-item{border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:11px;background:rgba(255,255,255,.03);font-size:11px;color:#cfc9ba}
+.ar-item .it-g{font-size:20px}
+.ar-item .it-t{font-weight:800;color:#e8e2d4;margin:5px 0 3px}
+.ar-item .it-d{font-size:10px;color:#8b93a5;line-height:1.45;min-height:28px}
+.ar-item .it-b{margin-top:8px}
+.ar-item.owned{border-color:rgba(46,230,168,.3)}
+.ar-item.owned .it-b{border-color:rgba(46,230,168,.4);color:#2ee6a8;background:none;cursor:default}

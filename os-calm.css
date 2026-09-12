@@ -1,0 +1,68 @@
+/* ============ SmartzOS v5.21 — Calm Mode: easier on the eyes ============ */
+
+/* Global calm overrides — applied when body.calm is set */
+body.calm #ticker{display:none!important}
+body.calm #hudXP,body.calm #hudRank{display:none!important}
+body.calm #hud{display:none!important}
+
+/* Home: one guiding widget only, folders take the stage */
+body.calm #ohwTri,body.calm #ohwDrop{display:none!important}
+body.calm .oh-widgets{grid-template-columns:1fr!important;max-width:520px}
+body.calm .ohw{border-color:rgba(255,255,255,.08)!important;background:rgba(10,14,22,.55)!important;box-shadow:none!important}
+
+/* Wallpaper recedes in calm */
+body.calm #desktop{background:linear-gradient(rgba(5,7,15,.96),rgba(5,7,15,.985)),url('assets/triad.png') center/60% no-repeat!important}
+
+/* Kill ambient motion & glow noise */
+body.calm *,body.calm *::before,body.calm *::after{animation-duration:.001s!important;animation-iteration-count:1!important}
+body.calm .win,body.calm .ohw,body.calm .fold-tile,body.calm .card{box-shadow:none!important}
+body.calm #buddyFab{animation:none!important}
+
+/* Softer surfaces */
+body.calm{--glow:transparent}
+body.calm body,body.calm .win{backdrop-filter:none}
+body.calm .win{border-color:rgba(255,255,255,.1)}
+body.calm ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14)}
+
+/* Calm toggle button in taskbar */
+#calmBtn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#cde;border-radius:99px;padding:3px 10px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s}
+#calmBtn:hover{background:rgba(255,255,255,.12)}
+body.calm #calmBtn{background:rgba(120,180,255,.14);border-color:rgba(120,180,255,.35);color:#9cf}
+
+/* Zoran taskbar button — the front door */
+#zoBtn{background:linear-gradient(135deg,rgba(255,154,60,.18),rgba(224,79,255,.14));border:1px solid rgba(255,154,60,.4);color:#ffd9a8;border-radius:99px;padding:3px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap}
+#zoBtn:hover{background:linear-gradient(135deg,rgba(255,154,60,.3),rgba(224,79,255,.22));transform:translateY(-1px)}
+
+/* Zoran welcome card inside buddy chat */
+.zo-welcome{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:10px;margin-top:6px}
+.zo-welcome .zw-t{font-size:11px;font-weight:700;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.zo-welcome .zw-row{display:flex;flex-direction:column;gap:6px}
+.zo-welcome .zw-btn{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font-size:13px;font-weight:600;cursor:pointer;text-align:left;font-family:inherit;transition:all .15s}
+.zo-welcome .zw-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,154,60,.4)}
+.zo-welcome .zw-btn small{display:block;font-weight:400;color:var(--dim);font-size:11px}
+
+/* Wallet-first welcome card (v5.24) */
+.wc-min{max-width:340px;text-align:center;padding:36px 28px 26px;border-radius:22px;background:rgba(9,13,21,.92);border:1px solid rgba(255,255,255,.09);box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.wc-sigil{font-size:44px;line-height:1;margin-bottom:10px;filter:drop-shadow(0 0 18px rgba(79,201,255,.35))}
+.wc-name{font-size:20px;font-weight:800;letter-spacing:.34em;color:#e8f2ff;margin-bottom:8px}
+.wc-tag{font-size:13px;line-height:1.55;color:var(--dim,#8aa);margin-bottom:22px}
+.wc-min .btn{width:100%;padding:13px;font-size:15px;font-weight:700;border-radius:14px}
+.wc-zo{margin-top:18px;font-size:12px;line-height:1.6;color:#ffd9a8;background:rgba(255,154,60,.07);border:1px solid rgba(255,154,60,.18);border-radius:12px;padding:10px 12px}
+.wc-link{display:inline-block;margin-top:14px;font-size:11.5px;color:var(--dim,#8aa);text-decoration:none}
+.wc-link:hover{color:#cde}
+
+/* Toast diet — never more than 2 stacked, subtler entry */
+body.calm #toasts .toast:not(:nth-last-child(-n+2)){display:none!important}
+body.calm .toast{opacity:.92;box-shadow:none!important}
+
+/* Home search — ask ZO from the desktop */
+#zoHomeBar{display:flex;gap:8px;max-width:520px;margin:0 auto 14px}
+#zoHomeBar input{flex:1;background:rgba(10,14,22,.6);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:11px 16px;color:#fff;font-size:14px;font-family:inherit;outline:none;transition:border-color .2s}
+#zoHomeBar input:focus{border-color:rgba(255,154,60,.5)}
+#zoHomeBar input::placeholder{color:var(--dim,#8aa)}
+#zoHomeBar button{background:rgba(255,154,60,.15);border:1px solid rgba(255,154,60,.35);color:#ffd9a8;border-radius:12px;padding:0 16px;font-size:15px;cursor:pointer;font-family:inherit}
+#zoHomeBar button:hover{background:rgba(255,154,60,.25)}
+
+/* Buddy panel gets top billing — slightly larger, softer */
+#buddyPanel{z-index:9600}
+body.calm #buddyPanel{box-shadow:0 12px 40px rgba(0,0,0,.5)!important}

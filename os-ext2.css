@@ -1,0 +1,20 @@
+/* ============ SmartzOS v3.3 — On-Chain Pack ============ */
+.forge-onchain{border:1px solid rgba(255,154,60,.4);border-radius:12px;padding:14px;background:radial-gradient(300px 140px at 50% 0,rgba(255,154,60,.1),transparent);margin-top:12px}
+.forge-onchain h4{color:#ff9a3c;text-shadow:0 0 10px rgba(255,154,60,.6)}
+.lb-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1px solid #1e2c4a;border-radius:10px;margin-bottom:6px;background:#0d1320;font-size:12px}
+.lb-row.me{border-color:#e8c15a;box-shadow:0 0 12px rgba(232,193,90,.2)}
+.lb-pos{width:28px;font-weight:900;font-family:monospace;color:#8b98ad}
+.lb-pos.p1{color:#e8c15a;text-shadow:0 0 8px rgba(232,193,90,.8)}
+.lb-pos.p2{color:#c3cde0}
+.lb-pos.p3{color:#b97f4a}
+.lb-name{flex:1}.lb-name b{font-size:13px}
+.lb-ranktag{font-size:10px;color:#8b98ad}
+.lb-score{font-family:monospace;font-weight:700;color:#2ee6a8}
+.whale-row{display:flex;gap:10px;align-items:flex-start;padding:10px;border:1px solid #1e2c4a;border-radius:10px;margin-bottom:8px;background:#0d1320;font-size:12px}
+.whale-row .wi{font-size:20px}
+.whale-row .wt{color:#8b98ad;font-size:10px}
+.whale-high{border-left:3px solid #ff5c6a}
+.whale-med{border-left:3px solid #e8c15a}
+.att-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(46,230,168,.1);border:1px solid rgba(46,230,168,.5);color:#2ee6a8;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700}
+input.set-field{background:#0b101a;border:1px solid #1e2c4a;border-radius:8px;color:#e6ecf5;padding:8px 10px;font-size:11px;width:100%;font-family:monospace;margin-bottom:8px;outline:none}
+input.set-field:focus{border-color:#4fc9ff}

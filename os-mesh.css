@@ -1,0 +1,28 @@
+/* ============ SmartzOS v4.2 — Synergy Mesh ============ */
+#hud{position:fixed;top:0;left:0;right:0;height:34px;z-index:7000;display:flex;align-items:center;gap:14px;padding:0 14px;background:rgba(8,11,20,.92);backdrop-filter:blur(8px);border-bottom:1px solid #1e2c4a;font-family:monospace;font-size:11px;color:#8b98ad;overflow-x:auto;white-space:nowrap}
+#hud b{color:#e6ecf5}
+#hud .h-cr{color:#2ee6a8}#hud .h-xp{color:#e8c15a}#hud .h-rank{color:#e04fff}
+#hud .sep{color:#2a3650}
+#hud .hud-bal{font-size:10px}
+body.hud-on #desktop{height:calc(100vh - 86px);margin-top:34px}
+body.hud-on #startMenu{bottom:58px}
+body.hud-on .win{top:auto}
+@media(max-width:768px){#hud{gap:8px;font-size:10px}#hud .hud-bal{display:none}}
+/* Economy flow */
+.flow-map{display:flex;flex-direction:column;gap:8px}
+.flow-node{border:1px solid #1e2c4a;border-radius:10px;padding:10px 12px;background:#0d1320;font-size:12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.15s}
+.flow-node:hover{border-color:#4fc9ff}
+.flow-node .fi{font-size:20px}
+.flow-node .fn{flex:1}
+.flow-node .fs{font-family:monospace;font-size:11px;text-align:right}
+.flow-arrow{text-align:center;color:#2a3650;font-size:14px;line-height:1}
+.flow-in{color:#2ee6a8}.flow-out{color:#ff5c6a}
+.quest-step{display:flex;gap:10px;padding:10px;border:1px solid #1e2c4a;border-radius:10px;margin-bottom:8px;background:#0d1320;font-size:12px;align-items:center}
+.quest-step.done{border-color:rgba(46,230,168,.5)}
+.quest-step.cur{border-color:#e04fff;box-shadow:0 0 10px rgba(224,79,255,.2)}
+.quest-step .qn{width:26px;height:26px;border-radius:50%;background:#16203a;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;flex-shrink:0}
+.quest-step.done .qn{background:#0fa874}
+.quest-step.cur .qn{background:linear-gradient(135deg,#8a1fb0,#5a0f8a)}
+.perk-row{display:flex;gap:8px;align-items:center;padding:8px 10px;border:1px solid #1e2c4a;border-radius:8px;margin-bottom:6px;background:#0d1320;font-size:11px}
+.perk-row.on{border-color:rgba(46,230,168,.5)}
+.perk-row .pk{margin-left:auto;font-weight:700}

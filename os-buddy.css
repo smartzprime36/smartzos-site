@@ -1,0 +1,59 @@
+/* ============ SmartzOS v4.3 — ZO Buddy + Tours ============ */
+#buddyFab{position:fixed;right:16px;bottom:64px;z-index:8600;width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffb066,#b3540f);border:2px solid rgba(255,154,60,.6);box-shadow:0 0 20px rgba(255,154,60,.5),0 8px 24px rgba(0,0,0,.5);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:24px;transition:.2s;animation:buddyFloat 3s ease-in-out infinite}
+#buddyFab:hover{transform:scale(1.1)}
+@keyframes buddyFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+#buddyFab .dot{position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:#ff5c6a;border:2px solid #0a0e14;display:none}
+#buddyFab.has-tip .dot{display:block}
+#buddyPanel{position:fixed;right:16px;bottom:124px;z-index:8600;width:340px;max-width:calc(100vw - 32px);height:480px;max-height:calc(100vh - 160px);background:#0c1120;border:1px solid rgba(255,154,60,.4);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 24px rgba(255,154,60,.15);display:none;flex-direction:column;overflow:hidden}
+#buddyPanel.open{display:flex}
+.bp-head{padding:12px 14px;background:linear-gradient(90deg,rgba(255,154,60,.2),transparent);border-bottom:1px solid #1e2c4a;display:flex;align-items:center;gap:10px}
+.bp-head .av{width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffb066,#b3540f);display:flex;align-items:center;justify-content:center;font-size:16px}
+.bp-head .nm{font-weight:800;font-size:13px}
+.bp-head .st{font-size:10px;color:#2ee6a8}
+.bp-tabs{display:flex;border-bottom:1px solid #1e2c4a}
+.bp-tab{flex:1;text-align:center;padding:8px;font-size:11px;color:#8b98ad;cursor:pointer;font-weight:600}
+.bp-tab.on{color:#ff9a3c;border-bottom:2px solid #ff9a3c}
+.bp-body{flex:1;overflow-y:auto;padding:12px;font-size:12px}
+.bmsg{margin-bottom:10px;display:flex;gap:8px}
+.bmsg .bav{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:radial-gradient(circle at 35% 30%,#ffb066,#b3540f)}
+.bmsg.user{flex-direction:row-reverse}
+.bmsg.user .bav{background:linear-gradient(135deg,#0e6f9e,#123a7a)}
+.bmsg .bt{background:#16203a;border:1px solid #1e2c4a;border-radius:10px;padding:8px 12px;line-height:1.6;max-width:85%}
+.bmsg.user .bt{background:#12305a;border-color:#1e4a7a}
+.bmsg .bt .act{display:inline-block;margin-top:6px}
+.bmsg .bt .act button{background:linear-gradient(135deg,#b35c12,#8a3a0f);border:none;color:#fff;padding:6px 12px;border-radius:7px;font-size:11px;cursor:pointer;font-weight:700}
+.bp-in{display:flex;border-top:1px solid #1e2c4a}
+.bp-in input{flex:1;background:transparent;border:none;outline:none;color:#e6ecf5;padding:12px;font-size:12px}
+.bp-in button{background:none;border:none;color:#ff9a3c;font-size:16px;cursor:pointer;padding:0 14px}
+.bp-quick{display:flex;gap:6px;padding:8px 12px;border-top:1px solid #1e2c4a;flex-wrap:wrap}
+.bp-quick .q{font-size:10px;background:#16203a;border:1px solid #1e2c4a;border-radius:14px;padding:4px 10px;cursor:pointer;color:#8b98ad}
+.bp-quick .q:hover{border-color:#ff9a3c;color:#ff9a3c}
+/* ZO live commands */
+.zb-cmds{border-top:none;padding-bottom:0}
+.zb-chip{color:#2ee6a8;font-family:ui-monospace,Menlo,monospace}
+.zb-chip:hover{border-color:#2ee6a8;color:#2ee6a8}
+.zb-head{font-size:11px;font-weight:800;color:#e8c15a;margin-bottom:4px;font-family:ui-monospace,Menlo,monospace}
+.zb-mono{font-family:ui-monospace,Menlo,monospace;font-size:11px;line-height:1.7;color:#c9d4e6}
+.zb-up{color:#2ee6a8}
+.zb-dn{color:#ff5c6a}
+.zb-dim{font-size:10px;color:#8b98ad;margin-top:5px;line-height:1.5}
+.zb-link{display:inline-block;margin-top:6px;font-size:11px;color:#2ee6a8;text-decoration:none;border-bottom:1px dotted #2ee6a8}
+.zb-link:hover{color:#7ff2c9}
+.zb-typing{font-size:11px;color:#8b98ad;font-family:ui-monospace,Menlo,monospace}
+.zb-dots i{animation:zbBlink 1.2s infinite;font-style:normal}
+.zb-dots i:nth-child(2){animation-delay:.2s}
+.zb-dots i:nth-child(3){animation-delay:.4s}
+@keyframes zbBlink{0%,60%,100%{opacity:.2}30%{opacity:1}}
+/* tours */
+.tour-item{border:1px solid #1e2c4a;border-radius:10px;padding:10px 12px;margin-bottom:8px;background:#0d1320;cursor:pointer;font-size:12px;display:flex;align-items:center;gap:8px}
+.tour-item:hover{border-color:#ff9a3c}
+.tour-item.done{border-color:rgba(46,230,168,.5)}
+.tour-item .ti{flex:1}
+.tour-item .tt2{font-size:10px;color:#8b98ad;margin-top:2px}
+#tourTip{position:fixed;z-index:9500;max-width:280px;background:#16203a;border:1px solid #ff9a3c;border-radius:12px;padding:12px 14px;font-size:12px;box-shadow:0 12px 40px rgba(0,0,0,.7),0 0 20px rgba(255,154,60,.3);display:none}
+#tourTip .tt-step{font-size:10px;color:#ff9a3c;font-weight:800;margin-bottom:4px}
+#tourTip .tt-btns{display:flex;gap:8px;margin-top:10px}
+#tourTip .tt-btns button{flex:1;background:#1c2740;border:1px solid #2a3650;color:#e6ecf5;padding:6px;border-radius:7px;cursor:pointer;font-size:11px}
+#tourTip .tt-btns button.primary{background:linear-gradient(135deg,#b35c12,#8a3a0f);border:none}
+#tourVeil{position:fixed;inset:0;z-index:9400;background:rgba(5,7,15,.55);display:none}
+.spotlight{position:relative;z-index:9451!important;outline:3px solid #ff9a3c!important;outline-offset:3px;border-radius:10px;box-shadow:0 0 30px rgba(255,154,60,.6)!important}

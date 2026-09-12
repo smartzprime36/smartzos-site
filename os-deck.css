@@ -1,0 +1,45 @@
+/* SmartzOS v5.1 — Trader Command Deck */
+#win-deck{width:760px;height:600px}
+.deck-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:10px}
+.dcard{background:linear-gradient(160deg,rgba(20,26,40,.92),rgba(13,18,28,.96));border:1px solid var(--line,rgba(79,201,255,.14));border-radius:12px;padding:12px 14px;position:relative;overflow:hidden}
+.dcard h5{margin:0 0 8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim,#8aa);font-weight:600;display:flex;align-items:center;gap:6px}
+.dcard h5 .go{margin-left:auto;font-size:10px;color:#4fc9ff;cursor:pointer;text-transform:none;letter-spacing:0}
+.dcard h5 .go:hover{text-decoration:underline}
+.span4{grid-column:span 4}.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}.span3{grid-column:span 3}
+.deck-hero{grid-column:span 12;display:flex;align-items:center;gap:18px;flex-wrap:wrap;background:linear-gradient(120deg,rgba(79,201,255,.08),rgba(224,79,255,.06) 55%,rgba(255,154,60,.07))}
+.deck-hero .pv{font-size:30px;font-weight:800;letter-spacing:-.02em}
+.deck-hero .pv small{font-size:12px;color:var(--dim,#8aa);font-weight:500;display:block;letter-spacing:.1em;text-transform:uppercase}
+.deck-hero .pnl{font-size:13px;font-weight:700}
+.pos{color:#3ddc97}.neg{color:#ff5d7a}
+.tri-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed rgba(255,255,255,.05);font-size:12px}
+.tri-row:last-child{border-bottom:none}
+.tri-row .sym{font-weight:700;width:44px}
+.tri-row .pr{margin-left:auto;font-variant-numeric:tabular-nums}
+.tri-row .chg{width:56px;text-align:right;font-variant-numeric:tabular-nums;font-size:11px}
+.kv{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
+.kv b{font-variant-numeric:tabular-nums}
+.qa-row{display:flex;gap:8px;flex-wrap:wrap}
+.qa{flex:1;min-width:100px;text-align:center;padding:9px 6px;border-radius:10px;border:1px solid var(--line,rgba(79,201,255,.16));background:rgba(79,201,255,.05);cursor:pointer;font-size:11px;font-weight:600;transition:.15s}
+.qa:hover{background:rgba(79,201,255,.14);transform:translateY(-1px)}
+.qa .qi{font-size:17px;display:block;margin-bottom:3px}
+.feed{max-height:170px;overflow:auto;font-size:11.5px}
+.feed .fi{padding:4px 0;border-bottom:1px dashed rgba(255,255,255,.05);display:flex;gap:8px;align-items:baseline}
+.feed .fi .ft{color:var(--dim,#8aa);font-size:10px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px}
+.dot.g{background:#3ddc97}.dot.y{background:#ffc857}.dot.r{background:#ff5d7a}.dot.b{background:#4fc9ff}
+.empty-hint{font-size:11px;color:var(--dim,#8aa);font-style:italic;padding:6px 0}
+/* Grouped launcher */
+#launchpad{position:fixed;inset:0;z-index:900;display:none;background:rgba(8,12,20,.72);backdrop-filter:blur(8px)}
+#launchpad.open{display:flex;align-items:center;justify-content:center}
+.lp-panel{width:min(720px,94vw);max-height:84vh;overflow:auto;background:linear-gradient(160deg,#141a28,#0d121c);border:1px solid rgba(79,201,255,.22);border-radius:16px;padding:20px 22px;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.lp-search{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--line,rgba(79,201,255,.2));background:rgba(255,255,255,.04);color:#e8f2ff;font-size:14px;outline:none;margin-bottom:14px}
+.lp-cat{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim,#8aa);margin:12px 0 7px;font-weight:700}
+.lp-apps{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.lp-app{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:10px;border:1px solid transparent;cursor:pointer;font-size:12.5px;font-weight:600;transition:.13s}
+.lp-app:hover{background:rgba(79,201,255,.1);border-color:rgba(79,201,255,.25)}
+.lp-app .li{font-size:18px}
+.lp-app .ld{display:block;font-size:10px;color:var(--dim,#8aa);font-weight:400}
+@media(max-width:768px){
+  .span3,.span4,.span6,.span8{grid-column:span 12}
+  .deck-hero .pv{font-size:24px}
+}

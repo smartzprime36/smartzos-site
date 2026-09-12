@@ -1,0 +1,39 @@
+/* ============ SmartzOS v5.28 — Hamiltonian Protocol ============ */
+/* Vault HARD UTILITY LOCK badge */
+.hul-badge{display:flex;align-items:center;gap:10px;margin:10px 0;padding:10px 14px;border-radius:12px;border:1px solid rgba(74,222,128,.35);background:linear-gradient(90deg,rgba(74,222,128,.10),rgba(74,222,128,.03));font-size:12px}
+.hul-badge.off{border-color:rgba(255,209,102,.3);background:linear-gradient(90deg,rgba(255,209,102,.08),rgba(255,209,102,.02))}
+.hul-dot{width:10px;height:10px;border-radius:50%;background:#4ade80;box-shadow:0 0 10px #4ade80;animation:hulPulse 2.2s infinite}
+.hul-badge.off .hul-dot{background:#ffd166;box-shadow:0 0 10px #ffd166}
+@keyframes hulPulse{0%,100%{opacity:1}50%{opacity:.45}}
+.hul-badge b{color:#4ade80;letter-spacing:.14em;font-size:11px}
+.hul-badge.off b{color:#ffd166}
+.hul-badge span{opacity:.75}
+
+/* Utility vs paper split */
+.ups-card{margin:10px 0;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.ups-title{font-size:11px;letter-spacing:.12em;opacity:.7;margin-bottom:8px}
+.ups-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0}
+.ups-row b{color:var(--green)}
+.ups-row.paper b{color:var(--cyan)}
+.ups-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.06);margin-top:8px;overflow:hidden;display:flex}
+.ups-bar i{display:block;height:100%}
+.ups-bar .u{background:#4ade80}
+.ups-bar .p{background:var(--cyan)}
+.ups-note{font-size:11px;opacity:.55;margin-top:6px;font-style:italic}
+
+/* Macro-Pulse widget */
+#macroPulse{grid-column:1/-1;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03);transition:border-color .4s,box-shadow .4s}
+#macroPulse.def{border-color:rgba(74,222,128,.5);box-shadow:0 0 18px rgba(74,222,128,.15)}
+#macroPulse.agg{border-color:rgba(255,107,107,.5);box-shadow:0 0 18px rgba(255,107,107,.15);animation:mpFlash 2.4s infinite}
+@keyframes mpFlash{0%,100%{box-shadow:0 0 10px rgba(255,107,107,.10)}50%{box-shadow:0 0 26px rgba(255,107,107,.30)}}
+.mp-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.mp-head b{font-size:11px;letter-spacing:.16em;opacity:.75}
+.mp-state{margin-left:auto;font-size:12px;font-weight:700;letter-spacing:.08em}
+#macroPulse.def .mp-state{color:#4ade80}
+#macroPulse.agg .mp-state{color:#ff6b6b}
+#macroPulse.neu .mp-state{color:var(--cyan)}
+.mp-why{font-size:12px;opacity:.7;line-height:1.5;margin-bottom:8px}
+.mp-rec{font-size:12px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,.04);border-left:3px solid var(--cyan)}
+#macroPulse.def .mp-rec{border-left-color:#4ade80}
+#macroPulse.agg .mp-rec{border-left-color:#ff6b6b}
+.mp-rec b{display:block;font-size:11px;letter-spacing:.1em;opacity:.6;margin-bottom:2px}

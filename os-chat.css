@@ -1,0 +1,39 @@
+/* SmartzOS v5.4 — Community mesh chat */
+#win-chat{width:460px;height:560px}
+.chat-chans{display:flex;gap:6px;margin-bottom:10px}
+.chat-chan{padding:4px 12px;border-radius:99px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid rgba(126,232,255,.2);color:var(--dim,#8aa)}
+.chat-chan.on{border-color:var(--cyan,#7ee8ff);color:var(--cyan,#7ee8ff);background:rgba(126,232,255,.08);box-shadow:0 0 12px -4px rgba(126,232,255,.6)}
+.chat-log{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:4px 2px}
+.chat-msg{display:flex;gap:9px;align-items:flex-start;animation:winIn .25s}
+.chat-msg .ava{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;border:1px solid;background:rgba(255,255,255,.04)}
+.chat-msg .cbub{background:rgba(255,255,255,.04);border:1px solid rgba(126,232,255,.1);border-radius:4px 12px 12px 12px;padding:7px 11px;max-width:85%}
+.chat-msg .cwho{font-size:10px;font-weight:800;letter-spacing:.06em;margin-bottom:2px}
+.chat-msg .ctext{font-size:12.5px;line-height:1.45;word-break:break-word}
+.chat-msg.me .cbub{border-color:rgba(224,79,255,.3);background:rgba(224,79,255,.07)}
+.chat-msg .ctime{font-size:9px;color:var(--dim,#8aa);margin-left:6px}
+.chat-sys{font-size:10.5px;color:var(--dim,#8aa);text-align:center;font-style:italic}
+.chat-input{display:flex;gap:8px;margin-top:10px}
+.chat-input input{flex:1;padding:10px 13px;border-radius:10px;border:1px solid rgba(126,232,255,.25);background:rgba(255,255,255,.04);color:#e8f2ff;font-size:13px;outline:none}
+.chat-input input:focus{border-color:var(--cyan,#7ee8ff);box-shadow:0 0 14px -4px rgba(126,232,255,.6)}
+.chat-presence{font-size:10px;color:var(--dim,#8aa);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.chat-presence .dot{width:6px;height:6px;border-radius:50%;background:#3ddc97;animation:badgeBlink 2s step-end infinite}
+
+/* SmartzOS v5.13 — PRESENCE: online operatives panel */
+#win-chat .chat-log{height:218px}
+.chat-ops{background:#0d1320;border:1px solid #1e2c4a;border-radius:10px;padding:8px 10px;margin-bottom:8px}
+.chat-ops-title{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:9.5px;font-weight:800;letter-spacing:.14em;color:#e8c15a;margin-bottom:6px}
+.chat-ops-title .op-live{color:#2ee6a8;margin-right:4px}
+.chat-ops-list{height:84px;overflow-y:auto;display:flex;flex-direction:column}
+.chat-op{display:flex;align-items:center;gap:8px;height:28px;flex-shrink:0;border-bottom:1px solid rgba(30,44,74,.5)}
+.chat-op:last-child{border-bottom:none}
+.op-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:#2a3650}
+.op-dot.on{background:#2ee6a8;box-shadow:0 0 8px -1px #2ee6a8}
+.op-dot.warm{background:#e8c15a}
+.op-name{color:#e8c15a;font-size:11.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.op-lv{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:9.5px;color:var(--dim,#8aa);flex-shrink:0}
+.op-time{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:9.5px;color:#2a3650;flex-shrink:0;min-width:20px;text-align:right}
+.chat-ops-empty{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:9.5px;letter-spacing:.1em;color:#2a3650;height:28px;display:flex;align-items:center}
+@media(max-width:600px){
+  .chat-ops-list{display:flex;flex-direction:row;overflow-x:auto;overflow-y:hidden;height:28px;gap:10px}
+  .chat-op{border-bottom:none;flex-shrink:0}
+}

@@ -1,0 +1,63 @@
+/* SmartzOS v5.15 — Signals: notification center, quick settings, streak, price alerts */
+#sigBell{position:relative;cursor:pointer}
+#sigBell .sig-badge{position:absolute;top:-5px;right:-7px;min-width:15px;height:15px;padding:0 3px;border-radius:8px;
+  background:#e86a5f;color:#fff;font-size:9px;font-weight:800;display:none;place-items:center;line-height:15px;text-align:center}
+#sigBell.has-unread .sig-badge{display:block}
+
+#sigPanel{position:fixed;top:calc(var(--sbH,36px) + 6px);right:8px;width:min(380px,94vw);max-height:min(560px,72vh);
+  z-index:9000;display:none;flex-direction:column;border-radius:16px;overflow:hidden;
+  background:rgba(14,16,24,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(232,180,120,.22);box-shadow:0 18px 50px rgba(0,0,0,.55)}
+#sigPanel.open{display:flex}
+#sigPanel .sig-head{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--line,rgba(255,255,255,.08))}
+#sigPanel .sig-head b{font-size:12.5px;letter-spacing:.08em;color:#e8e2d4}
+#sigPanel .sig-tabs{display:flex;gap:6px;margin-left:auto}
+#sigPanel .sig-tab{padding:5px 11px;border-radius:9px;border:1px solid var(--line,rgba(255,255,255,.1));background:transparent;
+  color:#a9a294;font-size:10.5px;font-weight:700;cursor:pointer}
+#sigPanel .sig-tab.on{border-color:var(--gold,#e8b478);color:var(--gold,#e8b478);background:rgba(232,180,120,.08)}
+#sigPanel .sig-body{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+
+.sig-note{display:flex;gap:10px;padding:9px 11px;border-radius:11px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);font-size:11.5px;color:#cfc9ba}
+.sig-note.unread{border-color:rgba(232,180,120,.3);background:rgba(232,180,120,.05)}
+.sig-note .n-ic{font-size:15px;flex-shrink:0}
+.sig-note .n-t{font-weight:700;color:#e8e2d4;font-size:11.5px}
+.sig-note .n-b{color:#a9a294;font-size:10.5px;margin-top:2px;line-height:1.45}
+.sig-note .n-ts{margin-left:auto;font-size:9px;color:#6d7688;flex-shrink:0}
+.sig-empty{text-align:center;color:#6d7688;font-size:11px;padding:26px 10px}
+.sig-clear{align-self:center;padding:5px 14px;border-radius:9px;border:1px solid var(--line,rgba(255,255,255,.1));
+  background:transparent;color:#8b93a5;font-size:10px;cursor:pointer;margin-top:2px}
+.sig-clear:hover{color:#e8e2d4;border-color:rgba(232,180,120,.35)}
+
+/* quick settings rows */
+.qs-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 11px;border-radius:11px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);font-size:11.5px;color:#cfc9ba}
+.qs-row .qs-l{display:flex;align-items:center;gap:9px}
+.qs-tog{width:38px;height:21px;border-radius:11px;border:1px solid var(--line,rgba(255,255,255,.12));background:rgba(255,255,255,.05);
+  position:relative;cursor:pointer;transition:background .15s;flex-shrink:0}
+.qs-tog::after{content:'';position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#8b93a5;transition:all .15s}
+.qs-tog.on{background:rgba(46,230,168,.25);border-color:rgba(46,230,168,.5)}
+.qs-tog.on::after{left:19px;background:#2ee6a8}
+.qs-btn{padding:6px 13px;border-radius:9px;border:1px solid rgba(232,180,120,.3);background:rgba(232,180,120,.07);
+  color:var(--gold,#e8b478);font-size:10.5px;font-weight:700;cursor:pointer}
+
+/* price alert form + list */
+.pa-form{display:flex;gap:6px;flex-wrap:wrap;padding:4px 2px}
+.pa-form select,.pa-form input{background:rgba(255,255,255,.05);border:1px solid var(--line,rgba(255,255,255,.12));
+  color:#e8e2d4;border-radius:9px;padding:7px 9px;font-size:11px;outline:none}
+.pa-form select{flex:0 0 auto}
+.pa-form input{flex:1;min-width:90px}
+.pa-row{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:11px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);font-size:11px;color:#cfc9ba}
+.pa-row .pa-x{margin-left:auto;color:#e86a5f;cursor:pointer;font-size:13px;padding:2px 6px}
+
+/* streak widget on home */
+#streakW{display:flex;align-items:center;gap:12px}
+#streakW .st-fl{font-size:26px}
+#streakW .st-n{font-size:16px;font-weight:800;color:#e8b478}
+#streakW .st-s{font-size:10px;color:#8b93a5}
+#streakW .qs-btn{margin-left:auto}
+
+@media(max-width:768px){
+  #sigPanel{right:4px;left:4px;width:auto}
+}

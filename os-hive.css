@@ -1,0 +1,20 @@
+/* SmartzOS v5.5 — Hive Bridge */
+#win-hive{width:560px;height:520px}
+.hive-regime{padding:14px;border-radius:12px;text-align:center;margin-bottom:12px;border:1px solid;transition:.4s}
+.hive-regime .regime-name{font-size:20px;font-weight:800;letter-spacing:.08em;font-family:'Courier New',monospace}
+.hive-regime .regime-strat{font-size:11px;margin-top:4px;font-weight:700}
+.hive-regime .regime-why{font-size:10px;color:var(--dim,#8aa);margin-top:6px}
+.regime-vol{border-color:rgba(255,79,240,.5);background:rgba(255,79,240,.07);box-shadow:0 0 24px -8px rgba(255,79,240,.6)}
+.regime-vol .regime-name{color:#ff4ff0;text-shadow:0 0 14px rgba(255,79,240,.7)}
+.regime-stab{border-color:rgba(126,232,255,.5);background:rgba(126,232,255,.06);box-shadow:0 0 24px -8px rgba(126,232,255,.6)}
+.regime-stab .regime-name{color:#7ee8ff;text-shadow:0 0 14px rgba(126,232,255,.7)}
+.regime-neutral{border-color:rgba(255,255,255,.15);background:rgba(255,255,255,.03)}
+.regime-neutral .regime-name{color:#c9d4e3}
+.hive-workers{display:flex;flex-direction:column;gap:6px}
+.hive-worker{display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:10px;border:1px solid rgba(126,232,255,.12);background:rgba(255,255,255,.02);font-size:12px}
+.hive-worker .hw-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.hive-worker .hw-name{font-weight:700}
+.hive-worker .hw-status{margin-left:auto;font-size:10px;color:var(--dim,#8aa);font-family:'Courier New',monospace}
+.sol-log{max-height:120px;overflow:auto;font-size:10.5px;font-family:'Courier New',monospace;color:#a8c4dc}
+.sol-log .p0{color:#ff5d7a;font-weight:700}
+.sol-log .ok{color:#3ddc97}

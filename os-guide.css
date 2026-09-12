@@ -1,0 +1,44 @@
+/* SmartzOS — os-guide.css (v5.34: Orientation Pack) */
+
+/* ---------- Feature 1: NEW HERE? 1-2-3 deck card ---------- */
+#ogStart.og-card{border:1px solid var(--line);background:var(--panel2)}
+#ogStart .og-sub{font-size:10px;color:var(--dim);margin:-2px 0 8px}
+#ogStart .og-row{display:flex;align-items:center;gap:10px;padding:7px 8px;border:1px solid var(--line);border-radius:8px;margin-top:6px;background:rgba(255,255,255,.02)}
+#ogStart .og-row.og-done{opacity:.5}
+#ogStart .og-chip{flex:0 0 auto;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--gold);border:1px solid var(--line);border-radius:50%}
+#ogStart .og-row.og-done .og-chip{color:var(--sol2);border-color:var(--sol2)}
+#ogStart .og-txt{flex:1;min-width:0;display:flex;flex-direction:column}
+#ogStart .og-label{font-size:12px;color:var(--txt)}
+#ogStart .og-why{font-size:10px;color:var(--dim)}
+#ogStart .og-go{flex:0 0 auto;margin-left:auto;background:none;border:1px solid var(--gold);color:var(--gold);font-size:10px;letter-spacing:.06em;padding:4px 12px;border-radius:6px;cursor:pointer}
+#ogStart .og-go:hover{background:var(--gold);color:var(--panel2)}
+#ogStart .og-row.og-next{border-color:var(--gold);animation:ogPulse 2.4s ease-in-out infinite}
+@keyframes ogPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(232,193,90,0)}
+  50%{box-shadow:0 0 10px 1px rgba(232,193,90,.35)}
+}
+/* collapsed state: slim single row, never disappears */
+#ogStart.og-slim{padding:6px 8px}
+#ogStart .og-slim-btn{display:block;width:100%;text-align:left;background:none;border:none;color:var(--sol2);font-size:12px;padding:4px 2px;cursor:pointer}
+#ogStart .og-slim-btn:hover{color:var(--txt)}
+
+/* ---------- Feature 2: first-run dock chip (mobile only) ---------- */
+.sd-item.og-startchip{position:relative}
+.sd-item.og-startchip .sd-lb{color:var(--gold)}
+.sd-item.og-startchip::after{
+  content:'';position:absolute;inset:2px;border:1px solid var(--gold);border-radius:10px;
+  animation:ogRing 1.8s ease-out infinite;pointer-events:none
+}
+@keyframes ogRing{
+  0%{opacity:.9;transform:scale(.96)}
+  70%{opacity:.15;transform:scale(1.06)}
+  100%{opacity:0;transform:scale(1.08)}
+}
+@media (prefers-reduced-motion:reduce){
+  .sd-item.og-startchip::after,#ogStart .og-row.og-next{animation:none}
+  .sd-item.og-startchip::after{opacity:.6}
+}
+@media (min-width:1025px){.sd-item.og-startchip{display:none}}
+
+/* ---------- Feature 3: lock screen one-liner ---------- */
+.og-lock-sub{margin-top:10px;font-size:11px;color:var(--dim);max-width:320px;text-align:center;line-height:1.5}

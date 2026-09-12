@@ -1,0 +1,13 @@
+/* SmartzOS v5.17 — Telegram Bridge */
+.tg-body{display:flex;flex-direction:column;gap:8px;padding:10px}
+.tg-status{font-size:10.5px;padding:7px 11px;border-radius:10px;border:1px solid rgba(255,255,255,.08);
+  color:#8b93a5;background:rgba(255,255,255,.02)}
+.tg-status.ok{color:#2ee6a8;border-color:rgba(46,230,168,.25);background:rgba(46,230,168,.05)}
+.tg-status.warn{color:#ffb347;border-color:rgba(255,179,71,.3);background:rgba(255,179,71,.06)}
+.tg-log{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:4px 2px;min-height:0}
+.tg-msg .ava{font-size:15px}
+.tg-composer{display:flex;gap:8px}
+.tg-composer input{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--line,rgba(255,255,255,.12));
+  color:#e8e2d4;border-radius:11px;padding:9px 12px;font-size:12px;outline:none}
+.tg-composer input:focus{border-color:rgba(79,201,255,.45)}
+.tg-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}

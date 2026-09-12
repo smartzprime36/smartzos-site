@@ -1,0 +1,18 @@
+/* ============ SmartzOS v4.5 — Compliant Growth ============ */
+.treas-box{border:1px solid rgba(232,193,90,.4);border-radius:12px;padding:14px;background:radial-gradient(300px 120px at 50% 0,rgba(232,193,90,.1),transparent)}
+.treas-box h4{color:#e8c15a;text-shadow:0 0 10px rgba(232,193,90,.5)}
+.fee-row{display:flex;justify-content:space-between;font-size:11px;padding:7px 10px;border-bottom:1px dashed #1e2c4a;color:#c3cde0}
+.fee-row b{font-family:monospace}
+.pair-opt{border:1px solid #1e2c4a;border-radius:12px;padding:12px;margin-bottom:8px;background:#0d1320;font-size:12px}
+.pair-opt.rec{border-color:rgba(46,230,168,.4)}
+.pair-opt .po-t{font-weight:700;font-size:13px;margin-bottom:4px}
+.pair-opt .po-d{color:#8b98ad;font-size:11px;line-height:1.6}
+.bounty{border:1px solid #1e2c4a;border-radius:10px;padding:11px 12px;margin-bottom:8px;background:#0d1320;font-size:12px}
+.bounty .bt{font-weight:700;font-size:13px}
+.bounty .bd{color:#8b98ad;font-size:11px;margin-top:3px;line-height:1.5}
+.bounty .br{margin-top:6px;display:flex;gap:8px;align-items:center}
+.disc-label{font-size:9px;padding:2px 8px;border-radius:12px;font-weight:800}
+.disc-sim{background:rgba(232,193,90,.12);color:#e8c15a;border:1px solid rgba(232,193,90,.4)}
+.disc-chain{background:rgba(46,230,168,.12);color:#2ee6a8;border:1px solid rgba(46,230,168,.4)}
+.compliance{font-size:11px;color:#8b98ad;line-height:1.8}
+.compliance b{color:#c3cde0}

@@ -1,0 +1,70 @@
+/* ============ SmartzOS v3.2 — Advanced Extension Pack ============ */
+
+/* Boot splash */
+#splash{position:fixed;inset:0;z-index:9999;background:#05070f url('assets/triad.png') center/cover no-repeat;display:flex;align-items:center;justify-content:center;transition:opacity .8s}
+#splash::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(5,7,15,.55) 0%,rgba(5,7,15,.92) 100%)}
+#splash.hide{opacity:0;pointer-events:none}
+.sp-inner{position:relative;text-align:center;max-width:560px;padding:20px}
+.sp-title{font-size:26px;font-weight:900;letter-spacing:.15em;color:#4fc9ff;text-shadow:0 0 18px rgba(79,201,255,.9),0 0 40px rgba(79,201,255,.4)}
+.sp-sub{margin-top:10px;font-size:13px;letter-spacing:.3em;color:#e04fff;text-shadow:0 0 14px rgba(224,79,255,.9)}
+.sp-bar{height:6px;background:#16203a;border-radius:6px;margin:26px auto 12px;overflow:hidden;border:1px solid #1e2c4a}
+#sp-fill{height:100%;width:0;background:linear-gradient(90deg,#4fc9ff,#e04fff,#ff9a3c);box-shadow:0 0 12px rgba(224,79,255,.8);transition:width .3s}
+.sp-log{font-family:monospace;font-size:11px;color:#8b98ad;min-height:16px}
+
+/* Desktop wallpaper (subtle triad art) */
+#desktop{background:linear-gradient(rgba(5,7,15,.88),rgba(5,7,15,.94)),url('assets/triad.png') center/60% no-repeat}
+
+/* Price ticker in taskbar */
+#ticker{flex:1;overflow:hidden;height:34px;display:flex;align-items:center;margin:0 10px;border:1px solid #1e2c4a;border-radius:8px;background:#0c1120;padding:0 12px;max-width:520px}
+#ticker-txt{font-family:monospace;font-size:11px;color:#8b98ad;white-space:nowrap;animation:tick 24s linear infinite;display:inline-block;padding-left:100%}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+#ticker-txt b{font-weight:700}
+.tk-up{color:#2ee6a8}.tk-dn{color:#ff5c6a}
+
+/* Toasts */
+#toasts{position:fixed;right:16px;bottom:64px;z-index:8000;display:flex;flex-direction:column;gap:8px;max-width:320px}
+.toast{background:#0c1120;border:1px solid #1e2c4a;border-left:3px solid #4fc9ff;border-radius:10px;padding:10px 14px;font-size:12px;box-shadow:0 8px 30px rgba(0,0,0,.6);animation:tin .3s ease}
+.toast.warn{border-left-color:#e8c15a}
+.toast.err{border-left-color:#ff5c6a}
+.toast.ok{border-left-color:#2ee6a8}
+.toast .tt{font-weight:700;margin-bottom:2px}
+@keyframes tin{from{transform:translateX(40px);opacity:0}to{transform:none;opacity:1}}
+
+/* Advisor */
+.adv-card{border:1px solid #1e2c4a;border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#0d1320}
+.adv-card .ah{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin-bottom:6px}
+.adv-card .ab{font-size:12px;color:#c3cde0;line-height:1.6}
+.adv-card .act{margin-top:8px}
+.adv-pri-high{border-left:4px solid #ff5c6a}
+.adv-pri-med{border-left:4px solid #e8c15a}
+.adv-pri-low{border-left:4px solid #2ee6a8}
+.pri{font-size:9px;padding:2px 8px;border-radius:12px;margin-left:auto;font-weight:800}
+.pri-high{background:rgba(255,92,106,.15);color:#ff5c6a}
+.pri-med{background:rgba(232,193,90,.15);color:#e8c15a}
+.pri-low{background:rgba(46,230,168,.15);color:#2ee6a8}
+
+/* Portfolio */
+.alloc-bar{height:14px;border-radius:8px;overflow:hidden;display:flex;margin:8px 0 14px;border:1px solid #1e2c4a}
+.alloc-bar>div{height:100%;transition:.4s}
+.pf-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid #1e2c4a;border-radius:10px;margin-bottom:6px;background:#0d1320;font-size:12px}
+.pf-row .pv{margin-left:auto;text-align:right;font-family:monospace}
+.trinity-meter{height:10px;background:#16203a;border-radius:6px;overflow:hidden;margin-top:6px}
+.trinity-meter>div{height:100%;background:linear-gradient(90deg,#4fc9ff,#e04fff,#ff9a3c);box-shadow:0 0 10px rgba(224,79,255,.7);transition:.5s}
+
+/* CLI Terminal */
+.cli{background:#05070f;border:1px solid #1e2c4a;border-radius:10px;height:380px;display:flex;flex-direction:column;font-family:monospace}
+.cli-out{flex:1;overflow:auto;padding:12px;font-size:12px;line-height:1.7;color:#2ee6a8}
+.cli-out .c-cmd{color:#4fc9ff}
+.cli-out .c-err{color:#ff5c6a}
+.cli-out .c-dim{color:#8b98ad}
+.cli-in{display:flex;border-top:1px solid #1e2c4a}
+.cli-in input{flex:1;background:transparent;border:none;outline:none;color:#e6ecf5;font-family:monospace;font-size:12px;padding:10px 12px}
+.cli-in .prompt{padding:10px 0 10px 12px;color:#e04fff}
+
+/* Sparklines */
+.spark{width:70px;height:24px}
+
+/* Achievements strip */
+.achv{display:flex;gap:8px;flex-wrap:wrap}
+.achv .a{padding:6px 12px;border:1px solid #1e2c4a;border-radius:20px;font-size:11px;color:#8b98ad;background:#0d1320}
+.achv .a.un{border-color:#e8c15a;color:#e8c15a;box-shadow:0 0 10px rgba(232,193,90,.25)}

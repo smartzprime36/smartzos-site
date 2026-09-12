@@ -1,0 +1,11 @@
+/* ============ SmartzOS v5.25 — Hub tabs: one page per area ============ */
+.hub-tabs{display:flex;gap:4px;padding:6px 10px 0;overflow-x:auto;scrollbar-width:none;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.06)}
+.hub-tabs::-webkit-scrollbar{display:none}
+.hub-tab{flex:0 0 auto;display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:9px 9px 0 0;font-size:11px;font-weight:600;color:var(--dim,#8aa);cursor:pointer;border:1px solid transparent;border-bottom:none;white-space:nowrap;transition:all .15s;user-select:none}
+.hub-tab:hover{color:#cde;background:rgba(255,255,255,.05)}
+.hub-tab.on{color:#ffd9a8;background:rgba(255,154,60,.1);border-color:rgba(255,154,60,.25)}
+.hub-tab .hi{font-size:12px}
+
+/* Hub-switched windows inherit position so it feels like ONE page */
+.hub-jump{animation:hubIn .18s ease}
+@keyframes hubIn{from{opacity:.4;transform:scale(.99)}to{opacity:1;transform:scale(1)}}

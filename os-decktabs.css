@@ -1,0 +1,8 @@
+/* SmartzOS v5.9.1 — Deck pages */
+.deck-tabs{display:flex;gap:6px;margin-bottom:12px;position:sticky;top:-14px;z-index:5;padding:8px 0;background:linear-gradient(180deg,rgba(13,18,28,.98) 70%,transparent)}
+.deck-tab{padding:7px 16px;border-radius:99px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid rgba(126,232,255,.18);color:var(--dim,#8aa);transition:.15s;flex-shrink:0}
+.deck-tab:hover{color:#e8f2ff}
+.deck-tab.on{border-color:var(--cyan,#7ee8ff);color:var(--cyan,#7ee8ff);background:rgba(126,232,255,.1);box-shadow:0 0 14px -4px rgba(126,232,255,.6)}
+.deck-tab .dt-n{font-size:9px;opacity:.7;margin-left:5px}
+#win-deck .dcard[data-page]{transition:opacity .2s}
+#win-deck .dcard[data-page].dp-hide{display:none}

@@ -1,0 +1,22 @@
+/* ============ SmartzOS v5.26 — Loop Hardening ============ */
+
+/* Overclock Status Panel (Sanctum) */
+.loop-panel{margin-top:12px;border:1px solid rgba(224,79,255,.25);border-radius:14px;padding:14px;background:linear-gradient(135deg,rgba(224,79,255,.06),rgba(79,201,255,.04))}
+.loop-panel h4{margin:0 0 10px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#e8f2ff}
+.lp-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.lp-cell{background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:9px 11px}
+.lp-cell .l{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim,#8aa)}
+.lp-cell .v{font-size:16px;font-weight:800;color:#fff;margin-top:2px}
+.lp-cell .v.hot{color:#ff9a3c}
+.lp-cell .v.cool{color:#4fc9ff}
+.lp-decay{margin-top:10px;height:6px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.lp-decay>div{height:100%;border-radius:99px;background:linear-gradient(90deg,#ff9a3c,#e04fff);transition:width .8s}
+.lp-note{margin-top:8px;font-size:10.5px;color:var(--dim,#8aa);line-height:1.5}
+.lp-streak{display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;border:1px solid rgba(255,154,60,.35);color:#ffb35c;background:rgba(255,154,60,.08)}
+.lp-streak.off{border-color:rgba(255,255,255,.12);color:var(--dim,#8aa);background:none}
+
+/* Quick-launch dock on home */
+#qlDock{display:flex;gap:8px;justify-content:center;margin:0 auto 14px;flex-wrap:wrap}
+#qlDock .ql{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:13px;border:1px solid rgba(255,255,255,.12);background:rgba(10,14,22,.55);color:#e8f2ff;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
+#qlDock .ql:hover{border-color:rgba(255,154,60,.4);background:rgba(255,154,60,.08);transform:translateY(-1px)}
+#qlDock .ql .qi{font-size:15px}

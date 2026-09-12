@@ -1,0 +1,123 @@
+/* SmartzOS v5.13 — Launcher shell: lock screen, status bar, desktop home, taskbar */
+:root{--sbH:36px;--tbH:58px;--glass:rgba(16,18,26,.72);--line:rgba(255,255,255,.09)}
+
+/* ---------- LOCK / BOOT SCREEN ---------- */
+#lockScreen{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  background:radial-gradient(120% 100% at 50% 0%,#141a2a 0%,#0a0c14 70%);cursor:pointer;transition:opacity .6s ease,visibility .6s}
+#lockScreen.away{opacity:0;visibility:hidden;pointer-events:none}
+#lockScreen .lk-sigil{font-size:74px;filter:drop-shadow(0 0 24px rgba(232,180,120,.45));animation:lkFloat 4s ease-in-out infinite}
+@keyframes lkFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+#lockScreen .lk-os{font-family:var(--mono,monospace);letter-spacing:.42em;font-size:13px;color:var(--gold,#e8b478);text-transform:uppercase}
+#lockScreen .lk-clock{font-size:64px;font-weight:200;letter-spacing:.04em;color:#f2ede4;line-height:1}
+#lockScreen .lk-date{font-size:13px;color:var(--dim,#8b93a5);letter-spacing:.18em;text-transform:uppercase}
+#lockScreen .lk-tri{display:flex;gap:10px;margin-top:6px}
+#lockScreen .lk-tri span{font-size:10.5px;padding:4px 10px;border:1px solid var(--line);border-radius:20px;color:var(--dim,#8b93a5);background:rgba(255,255,255,.03)}
+#lockScreen .lk-enter{margin-top:26px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#cfc6b4;animation:lkPulse 2.2s ease-in-out infinite}
+@keyframes lkPulse{0%,100%{opacity:.35}50%{opacity:1}}
+#lockScreen .lk-ver{position:absolute;bottom:18px;font-size:9.5px;color:var(--dim,#8b93a5);letter-spacing:.2em}
+
+/* ---------- STATUS BAR (top) ---------- */
+#statusBar{position:fixed;top:0;left:0;right:0;height:var(--sbH);z-index:4000;display:flex;align-items:center;gap:10px;padding:0 12px;
+  background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+  font-family:var(--mono,monospace);font-size:11px;color:#d8d2c4;user-select:none}
+#statusBar .sb-brand{display:flex;align-items:center;gap:7px;font-weight:700;letter-spacing:.14em;color:var(--gold,#e8b478);cursor:pointer}
+#statusBar .sb-brand b{font-size:13px}
+#statusBar .sb-mid{flex:1;display:flex;justify-content:center;gap:8px;overflow:hidden;white-space:nowrap}
+#statusBar .sb-chip{display:flex;align-items:center;gap:5px;padding:3px 9px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.03);font-size:10px;color:var(--dim,#8b93a5)}
+#statusBar .sb-chip b{color:#e6e0d2;font-weight:600}
+#statusBar .sb-chip .up{color:#7dd69a}#statusBar .sb-chip .dn{color:#e08a8a}
+#statusBar .sb-right{display:flex;align-items:center;gap:8px}
+#statusBar .sb-dot{width:7px;height:7px;border-radius:50%;background:#7dd69a;box-shadow:0 0 6px #7dd69a}
+#statusBar .sb-dot.off{background:#e08a8a;box-shadow:0 0 6px #e08a8a}
+#statusBar .sb-wallet{cursor:pointer;color:#e6e0d2}
+#statusBar .sb-wallet:hover{border-color:var(--gold,#e8b478)}
+#statusBar .sb-clock{color:#d8d2c4;letter-spacing:.06em}
+
+/* ---------- DESKTOP HOME ---------- */
+#osHome{position:fixed;top:var(--sbH);left:0;right:0;bottom:var(--tbH);z-index:50;overflow-y:auto;overflow-x:hidden;padding:18px 20px 26px;
+  display:flex;flex-direction:column;gap:18px;scrollbar-width:thin}
+#desktop{display:none!important} /* flat icon field superseded by folders */
+#osHome .oh-widgets{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;max-width:1100px;width:100%;margin:0 auto}
+#osHome .ohw{background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:13px 15px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;transition:border-color .2s,transform .2s}
+#osHome .ohw:hover{border-color:rgba(232,180,120,.4);transform:translateY(-2px)}
+#osHome .ohw .ohw-t{font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim,#8b93a5);margin-bottom:7px}
+#osHome .ohw .ohw-b{font-size:13px;color:#ece6d8;line-height:1.5}
+#osHome .ohw .ohw-b b{color:var(--gold,#e8b478)}
+#osHome .ohw .tri-row{display:flex;gap:8px}
+#osHome .ohw .tri-p{flex:1;text-align:center;padding:7px 4px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02)}
+#osHome .ohw .tri-p .s{font-size:10px;color:var(--dim,#8b93a5);letter-spacing:.1em}
+#osHome .ohw .tri-p .p{font-size:12.5px;color:#ece6d8;font-weight:600;margin-top:2px}
+#osHome .ohw .tri-p .c{font-size:9.5px;margin-top:1px}
+#osHome .ohw .tri-p .c.up{color:#7dd69a}#osHome .ohw .tri-p .c.dn{color:#e08a8a}
+#osHome .oh-folders{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:16px;max-width:1100px;width:100%;margin:0 auto}
+.oh-fold{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:transform .18s}
+.oh-fold:hover{transform:scale(1.05)}
+.oh-fold .fold-tile{width:76px;height:76px;border-radius:20px;background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(10px);
+  display:grid;grid-template-columns:1fr 1fr;place-items:center;padding:12px;font-size:17px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.oh-fold .fold-name{font-size:10.5px;color:#d8d2c4;letter-spacing:.06em;text-align:center}
+.oh-app{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:transform .18s}
+.oh-app:hover{transform:scale(1.07)}
+.oh-app .app-tile{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:27px;
+  background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid var(--line);box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.oh-app .app-name{font-size:10px;color:#d8d2c4;text-align:center;max-width:88px;line-height:1.25}
+
+/* folder sheet (expanded folder) */
+#foldSheet{position:fixed;inset:0;z-index:4500;display:none;align-items:center;justify-content:center;background:rgba(6,8,12,.55);backdrop-filter:blur(6px)}
+#foldSheet.open{display:flex}
+#foldSheet .fs-panel{background:var(--glass);border:1px solid var(--line);border-radius:22px;padding:22px;max-width:480px;width:92%;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);animation:winIn .25s ease}
+#foldSheet .fs-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+#foldSheet .fs-title{font-family:var(--mono,monospace);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold,#e8b478)}
+#foldSheet .fs-x{background:none;border:1px solid var(--line);border-radius:8px;color:#d8d2c4;width:26px;height:26px;cursor:pointer}
+#foldSheet .fs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+#foldSheet .fs-desc{grid-column:1/-1;font-size:10.5px;color:var(--dim,#8b93a5);margin-top:4px;text-align:center}
+
+/* ---------- TASKBAR (bottom) ---------- */
+#taskbar{position:fixed;left:0;right:0;bottom:0;height:var(--tbH);z-index:4000;display:flex;align-items:center;gap:8px;padding:0 10px;
+  background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line);user-select:none}
+#taskbar .tb-start{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:13px;border:1px solid rgba(232,180,120,.35);
+  background:linear-gradient(145deg,rgba(232,180,120,.14),rgba(232,180,120,.04));color:var(--gold,#e8b478);font-family:var(--mono,monospace);
+  font-size:11.5px;font-weight:700;letter-spacing:.14em;cursor:pointer;transition:transform .15s}
+#taskbar .tb-start:hover{transform:scale(1.04)}
+#taskbar .tb-runs{flex:1;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:4px 2px}
+#taskbar .tb-runs::-webkit-scrollbar{display:none}
+#taskbar .tb-run{display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:11px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);color:#cfc9ba;font-size:11px;cursor:pointer;white-space:nowrap;transition:border-color .15s}
+#taskbar .tb-run:hover{border-color:rgba(232,180,120,.4)}
+#taskbar .tb-run.focus{border-color:var(--gold,#e8b478);background:rgba(232,180,120,.1)}
+#taskbar .tb-run .g{font-size:14px}
+#taskbar .tb-right{display:flex;align-items:center;gap:8px}
+#taskbar .tb-home{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.03);
+  color:#d8d2c4;font-size:15px;cursor:pointer;display:grid;place-items:center}
+#taskbar .tb-home:hover{border-color:rgba(232,180,120,.4)}
+#taskbar .tb-clock{font-family:var(--mono,monospace);font-size:10.5px;color:var(--dim,#8b93a5);text-align:right;line-height:1.35;padding-right:4px}
+#taskbar .tb-clock b{color:#d8d2c4;font-size:11.5px}
+
+/* push existing UI up/down so shell never overlaps */
+body{--shellTop:var(--sbH)}
+#hud{top:calc(var(--sbH) + 8px)!important}
+.win{z-index:3000}
+#mobDock{display:none!important} /* superseded by the taskbar */
+
+/* v5.14 declutter — retire the legacy taskbar buttons (kept in DOM for legacy writers) */
+#taskbar>#startBtn,#taskbar>#walletBtn,#taskbar>#rankChip,
+#taskbar>#ticker,#taskbar>#clock,#taskbar>.btn.ghost{display:none!important}
+/* home screen = calm: HUD stats strip only shows while a window is open */
+body.os-home #hud{display:none!important}
+
+/* ---------- MOBILE (Android-style) ---------- */
+@media(max-width:768px){
+  #statusBar{padding:0 8px;gap:6px}
+  #statusBar .sb-mid{display:none}
+  #statusBar .sb-right{margin-left:auto}
+  #osHome{padding:12px 12px 18px;gap:14px}
+  #osHome .oh-folders{grid-template-columns:repeat(4,1fr);gap:12px}
+  .oh-fold .fold-tile{width:62px;height:62px;border-radius:17px;font-size:14px;padding:9px}
+  .oh-app .app-tile{width:54px;height:54px;font-size:23px;border-radius:15px}
+  #foldSheet{align-items:flex-end}
+  #foldSheet .fs-panel{width:100%;max-width:none;border-radius:22px 22px 0 0;max-height:78%;overflow-y:auto;padding-bottom:30px}
+  #taskbar{padding:0 8px;gap:6px}
+  #taskbar .tb-clock{display:none}
+  #taskbar .tb-start span.tb-lbl{display:none}
+  #lockScreen .lk-clock{font-size:46px}
+}
