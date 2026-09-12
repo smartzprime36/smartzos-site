@@ -1,3 +1,5 @@
+// SmartzOS Telegram Bridge v31 "Tape Cache+" — v30 + parallel kv reads (tape+calls in one round)
+// SmartzOS Telegram Bridge v30 "Tape Cache" — v28 + 45s kv tape cache (hit <1s, stale-fallback) — Dexscreener under load protection
 // SmartzOS Telegram Bridge v28 "Agent Gateway" — v27 + public JSON feeds (tape_data/calls_data/agents, CORS + GET) + AI agent registry: /agent new <name> mints keys, agent_say/whoami/register actions, 5m per-agent cooldown
 // SmartzOS Telegram Bridge v27 "Trading Room" — v26 + Syndicate Tape (live prices), directional /call with auto-resolution (+15 pts), price /alert tripwires, teach/call points on the board
 // SmartzOS Telegram Bridge v26 "Floor Learner" — v25 + deferred group answers: questions wait 4 min for a human; if the floor stays silent, Zoran answers (brain-learned, attributed, or KB)
@@ -203,34 +205,53 @@ const TAPE_TOKENS: [string, string][] = [
   ['TUNNEL', 'EemmWtCteqn5HTDqLMnAKgqGqpyuoA6BxyuU7pJD29QK'],
 ];
 const TAPE_MAP: Record<string, string> = Object.fromEntries(TAPE_TOKENS);
-async function marketTape(): Promise<string> {
+/* ---------- v30: tape cache — one Dexscreener fetch per 45s, stale fallback ---------- */
+type TapeTokenData = { price: number | null; chg24: number | null; vol24: number | null; liq: number | null };
+const TAPE_TTL_MS = 45_000;
+const TAPE_SYM_BY_MINT: Record<string, string> = Object.fromEntries(TAPE_TOKENS.map(([s, m]) => [m, s]));
+async function getTapeTokens(): Promise<{ tokens: Record<string, TapeTokenData>; cache: 'hit' | 'miss' | 'stale'; age_ms: number }> {
+  const now = Date.now();
+  const st = await getState('tape_cache');
+  const fresh = st.ts && now - Number(st.ts) < TAPE_TTL_MS && st.tokens;
+  if (fresh) return { tokens: st.tokens as never, cache: 'hit', age_ms: now - Number(st.ts) };
+  const tokens: Record<string, TapeTokenData> = {};
   try {
     const r = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${TAPE_TOKENS.map(t => t[1]).join(',')}`);
     const d = await r.json();
     const pairs: any[] = d.pairs || [];
-    const lines: string[] = [];
     for (const [sym, mint] of TAPE_TOKENS) {
       const cands = pairs.filter(p => p.baseToken?.address === mint);
-      if (!cands.length) { lines.push(`· ${sym}: unlisted`); continue; }
+      if (!cands.length) { tokens[sym] = { price: null, chg24: null, vol24: null, liq: null }; continue; }
       const p = cands.reduce((a, b) => ((a.liquidity?.usd || 0) > (b.liquidity?.usd || 0) ? a : b));
-      const chg = Number(p.priceChange?.h24 ?? 0);
-      const arrow = chg >= 0 ? '🟢' : '🔴';
-      lines.push(`· ${sym}  $${p.priceUsd}  ${arrow} ${chg >= 0 ? '+' : ''}${chg}% 24h  · vol $${(p.volume?.h24 || 0).toLocaleString()}`);
+      tokens[sym] = { price: parseFloat(p.priceUsd) || null, chg24: Number(p.priceChange?.h24 ?? 0), vol24: p.volume?.h24 ?? null, liq: p.liquidity?.usd ?? null };
     }
-    return `📡 SYNDICATE TAPE\n` + lines.join('\n') + `\n\nOn the desk (DM): /trade · In here: /call · Tripwires: /alert`;
+    await setState('tape_cache', { ts: now, tokens });
+    return { tokens, cache: 'miss', age_ms: 0 };
   } catch (e) {
-    return `📡 SYNDICATE TAPE — feed hiccup (${String(e).slice(0, 60)}). /tape again in a minute.`;
+    // Dexscreener unreachable: serve the stale cache rather than nulls
+    if (st.tokens) return { tokens: st.tokens as never, cache: 'stale', age_ms: st.ts ? now - Number(st.ts) : -1 };
+    for (const [sym] of TAPE_TOKENS) tokens[sym] = { price: null, chg24: null, vol24: null, liq: null };
+    return { tokens, cache: 'miss', age_ms: 0 };
   }
 }
+async function marketTape(): Promise<string> {
+  const { tokens, cache } = await getTapeTokens();
+  const lines: string[] = [];
+  for (const [sym] of TAPE_TOKENS) {
+    const t = tokens[sym];
+    if (!t || t.price == null) { lines.push(`· ${sym}: unlisted`); continue; }
+    const chg = t.chg24 ?? 0;
+    const arrow = chg >= 0 ? '🟢' : '🔴';
+    lines.push(`· ${sym}  $${t.price}  ${arrow} ${chg >= 0 ? '+' : ''}${chg}% 24h  · vol $${(t.vol24 || 0).toLocaleString()}`);
+  }
+  const tag = cache === 'hit' ? ' ⚡cached' : cache === 'stale' ? ' ⚠stale feed' : '';
+  return `📡 SYNDICATE TAPE${tag}\n` + lines.join('\n') + `\n\nOn the desk (DM): /trade · In here: /call · Tripwires: /alert`;
+}
 async function tokenPriceUsd(mint: string): Promise<number | null> {
-  try {
-    const r = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${mint}`);
-    const d = await r.json();
-    const pairs = ((d.pairs || []) as any[]).filter(p => p.baseToken?.address === mint);
-    if (!pairs.length) return null;
-    const p = pairs.reduce((a, b) => ((a.liquidity?.usd || 0) > (b.liquidity?.usd || 0) ? a : b));
-    return parseFloat(p.priceUsd) || null;
-  } catch { return null; }
+  const sym = TAPE_SYM_BY_MINT[mint];
+  if (!sym) return null;
+  const { tokens } = await getTapeTokens();
+  return tokens[sym]?.price ?? null;
 }
 type Call = { id: number; name: string; handle: string; tok: string; dir: 'up' | 'down'; entry: number; ts: number; horizonH: number; resolved?: 'win' | 'loss'; exit?: number };
 async function getCalls(): Promise<{ seq: number; items: Call[] }> {
@@ -348,25 +369,9 @@ function mintAgentKey(): string {
   return 'agt_' + Array.from(b, x => x.toString(16).padStart(2, '0')).join('');
 }
 async function tapeData(): Promise<Record<string, unknown>> {
-  const tokens: Record<string, { price: number | null; chg24: number | null; vol24: number | null; liq: number | null }> = {};
-  try {
-    const r = await fetch(`https://api.dexscreener.com/latest/dex/tokens/${TAPE_TOKENS.map(t => t[1]).join(',')}`);
-    const d = await r.json();
-    const pairs: any[] = d.pairs || [];
-    for (const [sym, mint] of TAPE_TOKENS) {
-      const cands = pairs.filter(p => p.baseToken?.address === mint);
-      if (!cands.length) { tokens[sym] = { price: null, chg24: null, vol24: null, liq: null }; continue; }
-      const p = cands.reduce((a, b) => ((a.liquidity?.usd || 0) > (b.liquidity?.usd || 0) ? a : b));
-      tokens[sym] = {
-        price: parseFloat(p.priceUsd) || null,
-        chg24: Number(p.priceChange?.h24 ?? 0),
-        vol24: p.volume?.h24 ?? null,
-        liq: p.liquidity?.usd ?? null,
-      };
-    }
-  } catch { for (const [sym] of TAPE_TOKENS) if (!tokens[sym]) tokens[sym] = { price: null, chg24: null, vol24: null, liq: null }; }
-  const calls = await getCalls();
-  return { ok: true, ts: Date.now(), tokens, calls_open: calls.items.filter(x => !x.resolved).length, room: 'https://t.me/Smrtquickflips', hub: OS_LINK };
+  const [tape, calls] = await Promise.all([getTapeTokens(), getCalls()]);
+  const { tokens, cache, age_ms } = tape;
+  return { ok: true, ts: Date.now(), cache, cache_age_ms: age_ms, tokens, calls_open: calls.items.filter(x => !x.resolved).length, room: 'https://t.me/Smrtquickflips', hub: OS_LINK };
 }
 async function cmdAgent(m: TgMsg, args: string) {
   const CID = m.chat.id; const name = senderName(m);
