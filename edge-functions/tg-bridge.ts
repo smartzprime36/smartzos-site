@@ -7,7 +7,7 @@
 //   + bot commands (/start /guide /ranks /daily /help), welcomes, daily quiz, Sunday Top Voices
 //   + RAID MODE (/raid /raidstatus /raidend), STREAK KEEPER (gm /checkin),
 //   + ZORAN-IN-TG knowledge answers (+ Jupiter Earn-on-Recurring, Trailing Stop, concentrated LP bands)
-const TOKEN = Deno.env.get('TELEGRAM_BOT_TOKEN') || '8366854449:AAH7eRyV0GljMSk-_ixIpolzNGLb1fJpizA';
+const TOKEN = Deno.env.get('TELEGRAM_BOT_TOKEN') || '';
 const CHAT_ID = Deno.env.get('TELEGRAM_CHAT_ID') || '-1002901930616';
 const SB_URL = Deno.env.get('SUPABASE_URL') || '';
 const SB_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';

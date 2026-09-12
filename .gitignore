@@ -1,0 +1,7 @@
+# Local secrets — NEVER commit
+tg_secrets.json
+smartzdesk_agent_key.json
+aq_keys.json
+*keypair*.json
+solana_agent_keypair.json
+tg_token.json

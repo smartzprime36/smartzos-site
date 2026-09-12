@@ -11,9 +11,9 @@
 // scans tg_messages for question->answer pairs from the group, remembers them,
 // and reuses the floor's answers (attributed). Learns at most every 10 min.
 
-// v2: token fallback matches tg-bridge so DM replies work without a per-function
-// secret (env secret still wins when set).
-const TOKEN = Deno.env.get('TELEGRAM_BOT_TOKEN') || '8366854449:AAH7eRyV0GljMSk-_ixIpolzNGLb1fJpizA';
+// v2: env-only. Deploy tooling injects the token at deploy time from a
+// local secrets file (never committed). Set TELEGRAM_BOT_TOKEN secret to override.
+const TOKEN = Deno.env.get('TELEGRAM_BOT_TOKEN') || '';
 const SB_URL = Deno.env.get('SUPABASE_URL') || '';
 const SB_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') || '';
 const OS_LINK = 'https://smc.kimi.page';
