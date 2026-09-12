@@ -11,7 +11,7 @@ body.calm .oh-widgets{grid-template-columns:1fr!important;max-width:520px}
 body.calm .ohw{border-color:rgba(255,255,255,.08)!important;background:rgba(10,14,22,.55)!important;box-shadow:none!important}
 
 /* Wallpaper recedes in calm */
-body.calm #desktop{background:linear-gradient(rgba(5,7,15,.96),rgba(5,7,15,.985)),url('assets/triad.png') center/60% no-repeat!important}
+body.calm #desktop{background:linear-gradient(rgba(5,7,15,.96),rgba(5,7,15,.985)),url('assets/triad.jpg') center/60% no-repeat!important}
 
 /* Kill ambient motion & glow noise */
 body.calm *,body.calm *::before,body.calm *::after{animation-duration:.001s!important;animation-iteration-count:1!important}

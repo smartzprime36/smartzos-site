@@ -1,7 +1,7 @@
 /* ============ SmartzOS v3.2 — Advanced Extension Pack ============ */
 
 /* Boot splash */
-#splash{position:fixed;inset:0;z-index:9999;background:#05070f url('assets/triad.png') center/cover no-repeat;display:flex;align-items:center;justify-content:center;transition:opacity .8s}
+#splash{position:fixed;inset:0;z-index:9999;background:#05070f url('assets/triad.jpg') center/cover no-repeat;display:flex;align-items:center;justify-content:center;transition:opacity .8s}
 #splash::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(5,7,15,.55) 0%,rgba(5,7,15,.92) 100%)}
 #splash.hide{opacity:0;pointer-events:none}
 .sp-inner{position:relative;text-align:center;max-width:560px;padding:20px}
@@ -12,7 +12,7 @@
 .sp-log{font-family:monospace;font-size:11px;color:#8b98ad;min-height:16px}
 
 /* Desktop wallpaper (subtle triad art) */
-#desktop{background:linear-gradient(rgba(5,7,15,.88),rgba(5,7,15,.94)),url('assets/triad.png') center/60% no-repeat}
+#desktop{background:linear-gradient(rgba(5,7,15,.88),rgba(5,7,15,.94)),url('assets/triad.jpg') center/60% no-repeat}
 
 /* Price ticker in taskbar */
 #ticker{flex:1;overflow:hidden;height:34px;display:flex;align-items:center;margin:0 10px;border:1px solid #1e2c4a;border-radius:8px;background:#0c1120;padding:0 12px;max-width:520px}
