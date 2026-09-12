@@ -1,3 +1,4 @@
+// SmartzOS Telegram Bridge v32 "Pulse History" — v31 + tape_history time series (5-min points, 10-day rolling, self-collecting on cache misses)
 // SmartzOS Telegram Bridge v31 "Tape Cache+" — v30 + parallel kv reads (tape+calls in one round)
 // SmartzOS Telegram Bridge v30 "Tape Cache" — v28 + 45s kv tape cache (hit <1s, stale-fallback) — Dexscreener under load protection
 // SmartzOS Telegram Bridge v28 "Agent Gateway" — v27 + public JSON feeds (tape_data/calls_data/agents, CORS + GET) + AI agent registry: /agent new <name> mints keys, agent_say/whoami/register actions, 5m per-agent cooldown
@@ -226,6 +227,7 @@ async function getTapeTokens(): Promise<{ tokens: Record<string, TapeTokenData>;
       tokens[sym] = { price: parseFloat(p.priceUsd) || null, chg24: Number(p.priceChange?.h24 ?? 0), vol24: p.volume?.h24 ?? null, liq: p.liquidity?.usd ?? null };
     }
     await setState('tape_cache', { ts: now, tokens });
+    try { await appendTapeHistory(tokens); } catch (e) { try { await setState('tape_hist_err', { msg: String(e).slice(0, 200), ts: Date.now() }); } catch { /* ignore */ } }
     return { tokens, cache: 'miss', age_ms: 0 };
   } catch (e) {
     // Dexscreener unreachable: serve the stale cache rather than nulls
@@ -252,6 +254,16 @@ async function tokenPriceUsd(mint: string): Promise<number | null> {
   if (!sym) return null;
   const { tokens } = await getTapeTokens();
   return tokens[sym]?.price ?? null;
+}
+/* ---------- v32: pulse history — one price point per 5 min, collected automatically on tape misses ---------- */
+async function appendTapeHistory(tokens: Record<string, TapeTokenData>): Promise<void> {
+  const st = await getState('tape_hist');
+  const arr: any[] = Array.isArray(st.items) ? st.items : [];
+  const now = Date.now();
+  if (arr.length && now - Number(arr[arr.length - 1].t) < 5 * 60e3) return;
+  arr.push({ t: now, p: Object.fromEntries(TAPE_TOKENS.map(([s]) => [s, tokens[s]?.price ?? null])) });
+  while (arr.length > 2880) arr.shift();
+  await setState('tape_hist', { items: arr });
 }
 type Call = { id: number; name: string; handle: string; tok: string; dir: 'up' | 'down'; entry: number; ts: number; horizonH: number; resolved?: 'win' | 'loss'; exit?: number };
 async function getCalls(): Promise<{ seq: number; items: Call[] }> {
@@ -1322,6 +1334,13 @@ Deno.serve(async (req: Request) => {
 
   /* ---------- v28: public feeds + agent gateway ---------- */
   if (action === 'tape_data') return json(await tapeData());
+
+  if (action === 'tape_history') {
+    const st = await getState('tape_hist');
+    const err = await getState('tape_hist_err');
+    const items = Array.isArray(st.items) ? st.items : [];
+    return json({ ok: true, ts: Date.now(), interval_ms: 5 * 60e3, points: items.length, series: items.slice(-720), err: err.msg || null, err_ts: err.ts || null });
+  }
 
   if (action === 'calls_data') {
     const c = await getCalls();
