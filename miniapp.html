@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SMARTZ Desk — Syndicate Trading Room</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+<script>
+/* ADSGRAM CONFIG — paste your block ID from the AdsGram dashboard.
+   Until then the ad slot stays a labeled placeholder and nothing breaks. */
+const ADSGRAM_BLOCK_ID = 'PASTE_YOUR_BLOCK_ID';
+</script>
 <style>
   :root { --bg:#0b0e14; --card:#12161f; --line:#1e2532; --txt:#e8ecf4; --dim:#8b94a7; --up:#3ddc97; --dn:#ff5c6c; --acc:#f0b90b; }
   * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
@@ -48,25 +54,38 @@
   <div class="foot">Smartz Syndicate · engagement pays · DYOR · v1.0</div>
 </div>
 
-<!-- ============================================================
-     AD-NETWORK SLOT (AdsGram / Tads / AdSonar — owner registers the
-     app on their platform, then paste their loader snippet here.
-     Mini App ads pay real CPC (~$0.015/click class) on top of the
-     in-house /ads desk. Keep this block the ONLY network ad unit.
-     ============================================================ -->
 <script>
-/* NETWORK_AD_START
-window.Adsgram = ... (platform snippet)
-const ad = window.Adsgram.init({ blockId: 'PASTE_UNIT_ID' });
-adSlot.onclick = () => ad.show().then(r => r.done && console.log('ad reward/click'));
-NETWORK_AD_END */
-
 const BRIDGE = 'https://dezhsrzymylqpzdtymij.supabase.co/functions/v1/tg-bridge';
 const tg = window.Telegram && window.Telegram.WebApp;
 if (tg) { tg.ready(); tg.expand(); if (tg.MainButton) { tg.MainButton.setText('JOIN THE FLOOR'); tg.MainButton.onClick(() => tg.openTelegramLink('https://t.me/Smrtquickflips')); tg.MainButton.show(); } }
 const buzz = () => { try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light'); } catch(e){} };
 document.getElementById('join').addEventListener('click', buzz);
 document.getElementById('os').addEventListener('click', buzz);
+
+/* ---- AdsGram slot: tap to show a network ad. Reward/clicks accrue in your
+   AdsGram dashboard. No block ID yet → the slot explains itself, nothing breaks. */
+const adSlot = document.getElementById('ad-slot');
+let adCtl = null;
+function initAd() {
+  if (!/^[\w-]{4,}$/.test(ADSGRAM_BLOCK_ID) || ADSGRAM_BLOCK_ID.indexOf('PASTE') === 0) {
+    adSlot.innerHTML = 'AD SPACE — sponsor the Syndicate (or wire your AdsGram block ID)';
+    return;
+  }
+  try {
+    adCtl = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
+    adSlot.innerHTML = '📺 TAP TO SUPPORT — watch a short ad, keep the desk free';
+    adSlot.style.cursor = 'pointer';
+    adSlot.onclick = () => {
+      buzz();
+      adSlot.innerHTML = 'Loading ad…';
+      adCtl.show().then((r) => {
+        if (r && r.done) { adSlot.innerHTML = '✅ Thanks — you keep the lights on.'; try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('success'); } catch(e){} }
+        else { adSlot.innerHTML = '📺 TAP TO SUPPORT — watch a short ad, keep the desk free'; }
+      }).catch(() => { adSlot.innerHTML = '📺 TAP TO SUPPORT — watch a short ad, keep the desk free'; });
+    };
+  } catch (e) { /* slot stays as-is */ }
+}
+if (document.readyState === 'complete') initAd(); else addEventListener('load', initAd);
 
 const fmt = (p) => { p = Number(p); if (!isFinite(p)) return '—'; return p >= 1 ? p.toFixed(4) : p.toPrecision(3); };
 async function loadTape() {
