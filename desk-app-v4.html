@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SMARTZ Desk — Syndicate Trading Room</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root { --bg:#0b0e14; --card:#12161f; --line:#1e2532; --txt:#e8ecf4; --dim:#8b94a7; --up:#3ddc97; --dn:#ff5c6c; --acc:#f0b90b; }
+  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  body { background:var(--bg); color:var(--txt); font-family:-apple-system,'Segoe UI',Roboto,sans-serif; min-height:100vh; }
+  .wrap { max-width:480px; margin:0 auto; padding:14px; }
+  .hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .hd h1 { font-size:18px; letter-spacing:1px; }
+  .hd h1 b { color:var(--acc); }
+  .live { font-size:10px; color:var(--up); border:1px solid var(--up); border-radius:20px; padding:2px 8px; }
+  .eng { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+  .chip { background:var(--card); border:1px solid var(--line); border-radius:20px; padding:4px 10px; font-size:11px; color:var(--dim); }
+  .chip b { color:var(--txt); }
+  .chip.gold b { color:var(--acc); }
+  .tape { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+  .tok { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:10px 12px; }
+  .tok .sym { font-size:12px; color:var(--dim); letter-spacing:1px; }
+  .tok .px { font-size:17px; font-weight:700; margin:2px 0; }
+  .tok .ch { font-size:12px; font-weight:600; }
+  .up { color:var(--up); } .dn { color:var(--dn); }
+  .sec { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:12px; }
+  .sec h2 { font-size:12px; color:var(--dim); letter-spacing:1.5px; margin-bottom:8px; text-transform:uppercase; }
+  .call { display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px solid var(--line); }
+  .call:last-child { border-bottom:none; }
+  .call .dir { font-weight:700; }
+  .call .meta { color:var(--dim); font-size:11px; }
+  .none { color:var(--dim); font-size:13px; }
+  .row { display:flex; gap:8px; margin-bottom:8px; }
+  .inp { flex:1; background:var(--bg); border:1px solid var(--line); border-radius:10px; color:var(--txt); padding:10px 12px; font-size:14px; min-width:0; }
+  select.inp { flex:0 0 92px; }
+  .fbtn { flex:1; border:none; border-radius:10px; font-weight:700; font-size:13px; padding:11px 0; cursor:pointer; }
+  .fbtn.h { background:var(--acc); color:#000; }
+  .fbtn.t { background:var(--card); color:var(--txt); border:1px solid var(--line); }
+  .fbtn.act { background:var(--up); color:#000; }
+  .fbtn.warn { background:#2a1218; color:var(--dn); border:1px solid var(--dn); }
+  .sub { font-size:11px; color:var(--dim); line-height:1.5; white-space:pre-line; }
+  #ad-slot { margin-bottom:12px; border:1px solid var(--line); border-radius:12px; background:var(--card); padding:6px 0; text-align:center; }
+  #ad-slot .lbl { font-size:9px; color:var(--dim); letter-spacing:1.5px; padding:2px 0 4px; }
+  #ad-slot iframe { display:block; margin:0 auto; border:0; width:100%; max-width:440px; height:110px; }
+  #toast { display:none; background:var(--card); border:1px solid var(--acc); border-radius:12px; padding:10px 12px; font-size:12.5px; line-height:1.5; margin-bottom:12px; white-space:pre-line; }
+  .cta { display:flex; gap:8px; flex-wrap:wrap; }
+  .btn { flex:1; min-width:30%; text-align:center; text-decoration:none; font-weight:700; font-size:14px; padding:13px 0; border-radius:12px; border:none; cursor:pointer; }
+  .btn.pri { background:var(--acc); color:#000; }
+  .btn.sec { background:var(--card); color:var(--txt); border:1px solid var(--line); }
+  .btn.ghost { flex-basis:100%; background:transparent; color:var(--dim); font-size:11px; font-weight:600; padding:6px 0; }
+  .foot { text-align:center; color:var(--dim); font-size:10px; margin-top:12px; }
+  #flip-result { text-align:center; font-size:15px; font-weight:700; padding:8px 0 2px; min-height:24px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd"><h1>SMARTZ<b>DESK</b></h1><span class="live">● LIVE</span></div>
+  <div class="eng" id="eng"><span class="chip">Open inside Telegram for games + check-ins</span></div>
+
+  <div class="sec">
+    <h2>🪙 Flip — Kill Points</h2>
+    <div class="row">
+      <input class="inp" id="flip-stake" type="number" min="1" value="10" inputmode="numeric">
+      <button class="fbtn h" id="flip-heads">HEADS</button>
+      <button class="fbtn t" id="flip-tails">TAILS</button>
+    </div>
+    <div id="flip-result"></div>
+    <div class="sub">Balance: <b id="kp-bal">—</b> KP · 1:1 payout, 20s cooldown, daily win cap. Kill Points are floor cred — earn via tips, offers, trades, referrals.</div>
+  </div>
+
+  <div class="sec">
+    <h2>🏦 LP Desk — group LP, pro-rata</h2>
+    <div class="sub" id="lp-status">Loading pools…</div>
+    <div class="row" style="margin-top:8px;">
+      <select class="inp" id="lp-tok"><option>SMC</option><option>SMF</option><option>SMRT</option><option>SOL</option></select>
+      <input class="inp" id="lp-amt" type="number" min="1" placeholder="amount" inputmode="numeric">
+    </div>
+    <div class="row">
+      <button class="fbtn act" id="lp-dep">DEPOSIT</button>
+      <button class="fbtn warn" id="lp-wd">WITHDRAW</button>
+    </div>
+    <div class="sub">Shares are 1:1 with your deposit token. The bank deploys pooled principal into LP positions (in-house pairs + outside farms like PURR-HYPE / ZCAT-ZEC). Harvests: 70% members pro-rata · 15% bank · 15% owner. Withdraw anytime the pool is liquid.</div>
+  </div>
+
+  <div class="tape" id="tape"><div class="tok"><span class="none">Loading tape…</span></div></div>
+  <div class="sec"><h2>Open Calls</h2><div id="calls"><div class="none">Loading…</div></div></div>
+
+  <div id="ad-slot">
+    <div class="lbl">SPONSORED — VIEWS FUND THE MEMBER REWARD POOL</div>
+    <iframe data-aa="2455269" src="https://acceptable.a-ads.com/2455269/?size=Adaptive"></iframe>
+  </div>
+
+  <div id="toast"></div>
+  <div class="cta">
+    <button class="btn pri" id="ckin">📅 CHECK-IN</button>
+    <a class="btn sec" id="join" href="https://t.me/Smrtquickflips">Join the Floor</a>
+    <a class="btn sec" id="os" href="https://smc.kimi.page">Open SmartzOS</a>
+    <button class="btn ghost" id="why">how the reward pool works</button>
+  </div>
+  <div class="foot">Smartz Syndicate · engagement pays · DYOR · v4.0</div>
+</div>
+
+<script>
+const BRIDGE = 'https://dezhsrzymylqpzdtymij.supabase.co/functions/v1/tg-bridge';
+const tg = window.Telegram && window.Telegram.WebApp;
+const initData = (tg && tg.initData) || '';
+if (tg) { tg.ready(); tg.expand(); if (tg.MainButton) { tg.MainButton.setText('JOIN THE FLOOR'); tg.MainButton.onClick(() => tg.openTelegramLink('https://t.me/Smrtquickflips')); tg.MainButton.show(); } }
+const buzz = (ok) => { try { tg && tg.HapticFeedback && (ok ? tg.HapticFeedback.notificationOccurred('success') : tg.HapticFeedback.impactOccurred('light')); } catch(e){} };
+const strip = (h) => String(h || '').replace(/<[^>]+>/g, '');
+let busy = false;
+
+function toast(msg, ok) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.borderColor = ok === false ? 'var(--dn)' : 'var(--acc)';
+  buzz(ok !== false);
+}
+
+async function call(action, extra) {
+  if (!initData) { toast('Open this desk inside Telegram (bot menu → 🚀 Desk) — your identity lives there.', false); return null; }
+  const r = await fetch(BRIDGE, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.assign({ action, initData }, extra || {})), signal: AbortSignal.timeout(12000) });
+  return r.json().catch(() => null);
+}
+
+/* ---- check-in + status chips ---- */
+async function refreshEng() {
+  const el = document.getElementById('eng');
+  if (!initData) return;
+  try {
+    const j = await call('eng_status');
+    if (!j || !j.ok) return;
+    el.innerHTML =
+      `<span class="chip gold">🔥 streak <b>${j.streak}d</b></span>` +
+      `<span class="chip">📅 check-ins <b>${j.checkins}</b>${j.chest ? ' 🏆' : ''}</span>` +
+      (j.boost_pct > 0 ? `<span class="chip gold">⚡ boost <b>+${j.boost_pct}%</b></span>` : `<span class="chip">⚡ boost <b>+0%</b></span>`) +
+      `<span class="chip">👥 qualified refs <b>${j.qualified_refs}</b></span>` +
+      (j.gate ? `<span class="chip gold">🚪 GATE CLEARED</span>` : '');
+    document.getElementById('kp-bal').textContent = (j.kp || 0).toLocaleString();
+  } catch (e) { /* keep last */ }
+}
+
+document.getElementById('ckin').addEventListener('click', async () => {
+  if (busy) return;
+  busy = true;
+  document.getElementById('ckin').textContent = '…';
+  try {
+    const j = await call('checkin');
+    if (!j) return;
+    toast(strip(j.dm) || (j.ok ? 'Checked in.' : 'Not yet — ' + (j.error || 'try again.')));
+    if (j.ok) refreshEng();
+  } catch (e) { toast('Desk unreachable — try again in a moment.', false); }
+  finally { busy = false; document.getElementById('ckin').textContent = '📅 CHECK-IN'; }
+});
+
+/* ---- flip ---- */
+let flipping = false;
+async function doFlip(callSide) {
+  if (flipping) return;
+  const stake = Math.floor(Number(document.getElementById('flip-stake').value || 0));
+  if (!(stake >= 1)) { toast('Stake at least 1 Kill Point.', false); return; }
+  flipping = true;
+  const res = document.getElementById('flip-result');
+  res.textContent = '🪙 flipping…';
+  try {
+    const j = await call('flip', { stake, call: callSide });
+    if (!j) { res.textContent = ''; return; }
+    if (j.ok) {
+      res.textContent = (j.won ? '🪙 ' + j.landed.toUpperCase() + ' — +' + j.stake + ' KP' : '🪙 ' + j.landed.toUpperCase() + ' — −' + j.stake + ' KP');
+      res.style.color = j.won ? 'var(--up)' : 'var(--dn)';
+      document.getElementById('kp-bal').textContent = (j.balance || 0).toLocaleString();
+      buzz(j.won);
+    } else {
+      res.textContent = '';
+      toast(strip(j.dm) || j.error, false);
+    }
+  } catch (e) { res.textContent = ''; toast('Coin dropped — try again.', false); }
+  finally { flipping = false; }
+}
+document.getElementById('flip-heads').addEventListener('click', () => doFlip('heads'));
+document.getElementById('flip-tails').addEventListener('click', () => doFlip('tails'));
+
+/* ---- LP desk ---- */
+async function refreshLp() {
+  if (!initData) return;
+  try {
+    const j = await call('lpdesk', { op: 'status' });
+    if (!j || !j.ok) return;
+    document.getElementById('lp-status').textContent = strip(j.dm).split('Deposit desk balances')[0].trim();
+  } catch (e) { /* keep last */ }
+}
+async function lpOp(op) {
+  if (busy) return;
+  busy = true;
+  const tok = document.getElementById('lp-tok').value;
+  const amt = Math.floor(Number(document.getElementById('lp-amt').value || 0));
+  if (!(amt >= 1)) { toast('Amount at least 1 ' + tok + '.', false); busy = false; return; }
+  try {
+    const j = await call('lpdesk', { op, tok, amt });
+    if (!j) return;
+    toast(strip(j.dm) || (j.ok ? 'Done.' : j.error), j.ok !== false && j.ok !== undefined ? j.ok : true);
+    refreshLp();
+  } catch (e) { toast('Desk unreachable — try again.', false); }
+  finally { busy = false; }
+}
+document.getElementById('lp-dep').addEventListener('click', () => lpOp('deposit'));
+document.getElementById('lp-wd').addEventListener('click', () => lpOp('withdraw'));
+
+document.getElementById('why').addEventListener('click', () => {
+  toast('The banner above pays the Syndicate treasury per view/click. The treasury funds daily check-ins, scout visits and referral boosts — paid in SMC dust to members. Check in daily: streaks multiply your pay up to 3x, and day 30 opens the Vesting Chest. Invitees who check in 3x qualify and add +7% to everything you earn (max +35%).');
+});
+document.getElementById('join').addEventListener('click', () => buzz(true));
+document.getElementById('os').addEventListener('click', () => buzz(true));
+
+/* ---- tape + calls (public, no identity needed) ---- */
+const fmt = (p) => { p = Number(p); if (!isFinite(p)) return '—'; return p >= 1 ? p.toFixed(4) : p.toPrecision(3); };
+async function loadTape() {
+  try {
+    const r = await fetch(BRIDGE + '?action=tape_data', { signal: AbortSignal.timeout(6000) });
+    const j = await r.json();
+    const t = j.tokens || {};
+    const el = document.getElementById('tape');
+    el.innerHTML = Object.entries(t).map(([sym, d]) => {
+      const ch = Number(d.chg24 || 0);
+      return `<div class="tok"><div class="sym">${sym}</div>` +
+        `<div class="px">$${fmt(d.price)}</div>` +
+        `<div class="ch ${ch >= 0 ? 'up' : 'dn'}">${ch >= 0 ? '▲' : '▼'} ${Math.abs(ch).toFixed(1)}% 24h · $${(Number(d.liq) || 0).toFixed(0)} liq</div></div>`;
+    }).join('') || '<div class="none">Tape offline — try again soon.</div>';
+  } catch (e) { /* keep last render */ }
+}
+async function loadCalls() {
+  try {
+    const r = await fetch(BRIDGE + '?action=calls_data', { signal: AbortSignal.timeout(6000) });
+    const j = await r.json();
+    const open = (j.open || j.calls || []).slice(0, 6);
+    document.getElementById('calls').innerHTML = open.length
+      ? open.map(c => `<div class="call"><span><span class="dir ${String(c.dir).toUpperCase() === 'UP' ? 'up' : 'dn'}">${String(c.dir).toUpperCase()}</span> ${c.sym || c.token || ''}</span><span class="meta">@${c.by || c.user || 'floor'} · ${c.ago || ''}</span></div>`).join('')
+      : '<div class="none">No open calls — the floor decides the next one. Calls live in the group.</div>';
+  } catch (e) { /* keep */ }
+}
+loadTape(); loadCalls(); refreshEng(); refreshLp();
+setInterval(loadTape, 30000);
+setInterval(loadCalls, 60000);
+setInterval(refreshEng, 60000);
+</script>
+</body>
+</html>
