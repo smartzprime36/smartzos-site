@@ -165,6 +165,8 @@
       </div>
       <div class="hint" style="margin-top:8px">Send SOL or any Syndicate token here from Phantom, an exchange, or the Bank. Keep ~0.001 SOL for network fees.</div>
     </div>
+    <div class="minilbl">On-chain — your keys</div>
+    <div id="chain-rows"><div class="empty">Reading the chain…</div></div>
     <div class="minilbl">Desk ledger</div>
     <div id="bal-rows"><div class="empty">Loading your balances…</div></div>
     <div class="stats">
@@ -320,6 +322,14 @@ async function refreshWallet() {
     document.getElementById('addr-card').style.display = 'block';
     document.getElementById('addr-txt').textContent = j.addr;
   }
+  // on-chain balances (member's own keys)
+  const oc = j.onchain || {};
+  const prefC = ['SOL', 'SMRT', 'SMF', 'SMC', 'TUNNEL'];
+  const ocKeys = ['SOL', ...prefC.filter(k => k !== 'SOL' && oc[k] > 0), ...Object.keys(oc).filter(k => k !== 'SOL' && !prefC.includes(k) && oc[k] > 0)];
+  const ocRows = ocKeys.filter(k => oc[k] > 0 || k === 'SOL');
+  document.getElementById('chain-rows').innerHTML = ocRows.length
+    ? ocRows.map(k => `<div class="row"><div class="k">${k}<small>on-chain</small></div><div class="v">${k === 'SOL' ? (Number(oc[k]) || 0).toFixed(4) : fmtN(oc[k])}</div></div>`).join('')
+    : '<div class="empty">Nothing on-chain yet — copy your address above and fund it.</div>';
   // balances
   const pref = ['SOL', 'SMRT', 'SMF', 'SMC', 'TUNNEL'];
   const keys = [...pref.filter(k => (j.balances || {})[k] > 0), ...Object.keys(j.balances || {}).filter(k => !pref.includes(k) && j.balances[k] > 0)];
