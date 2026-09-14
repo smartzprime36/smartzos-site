@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SMARTZ Desk — Syndicate Trading Room</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+<script>
+/* ADSGRAM CONFIG — paste your block ID from the AdsGram dashboard.
+   Until then the ad slot stays a labeled placeholder and nothing breaks. */
+const ADSGRAM_BLOCK_ID = 'PASTE_YOUR_BLOCK_ID';
+</script>
+<style>
+  :root { --bg:#0b0e14; --card:#12161f; --line:#1e2532; --txt:#e8ecf4; --dim:#8b94a7; --up:#3ddc97; --dn:#ff5c6c; --acc:#f0b90b; }
+  * { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+  body { background:var(--bg); color:var(--txt); font-family:-apple-system,'Segoe UI',Roboto,sans-serif; min-height:100vh; }
+  .wrap { max-width:480px; margin:0 auto; padding:14px; }
+  .hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .hd h1 { font-size:18px; letter-spacing:1px; }
+  .hd h1 b { color:var(--acc); }
+  .live { font-size:10px; color:var(--up); border:1px solid var(--up); border-radius:20px; padding:2px 8px; }
+  .tape { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px; }
+  .tok { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:10px 12px; }
+  .tok .sym { font-size:12px; color:var(--dim); letter-spacing:1px; }
+  .tok .px { font-size:17px; font-weight:700; margin:2px 0; }
+  .tok .ch { font-size:12px; font-weight:600; }
+  .up { color:var(--up); } .dn { color:var(--dn); }
+  .sec { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:12px; }
+  .sec h2 { font-size:12px; color:var(--dim); letter-spacing:1.5px; margin-bottom:8px; text-transform:uppercase; }
+  .call { display:flex; justify-content:space-between; font-size:13px; padding:6px 0; border-bottom:1px solid var(--line); }
+  .call:last-child { border-bottom:none; }
+  .call .dir { font-weight:700; }
+  .call .meta { color:var(--dim); font-size:11px; }
+  .none { color:var(--dim); font-size:13px; }
+  #ad-slot { min-height:60px; display:flex; align-items:center; justify-content:center; color:var(--dim); font-size:11px; border:1px dashed var(--line); border-radius:12px; margin-bottom:12px; background:var(--card); }
+  .cta { display:flex; gap:8px; }
+  .btn { flex:1; text-align:center; text-decoration:none; font-weight:700; font-size:14px; padding:13px 0; border-radius:12px; border:none; }
+  .btn.pri { background:var(--acc); color:#000; }
+  .btn.sec { background:var(--card); color:var(--txt); border:1px solid var(--line); }
+  .foot { text-align:center; color:var(--dim); font-size:10px; margin-top:12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd"><h1>SMARTZ<b>DESK</b></h1><span class="live">● LIVE</span></div>
+  <div class="tape" id="tape"><div class="tok"><span class="none">Loading tape…</span></div></div>
+  <div class="sec"><h2>Open Calls</h2><div id="calls"><div class="none">Loading…</div></div></div>
+  <div id="ad-slot">AD SPACE — Syndicate sponsors + ad-network slot</div>
+  <div class="cta">
+    <a class="btn pri" id="join" href="https://t.me/Smrtquickflips">Join the Floor</a>
+    <a class="btn sec" id="os" href="https://smc.kimi.page">Open SmartzOS</a>
+  </div>
+  <div class="foot">Smartz Syndicate · engagement pays · DYOR · v1.1</div>
+</div>
+
+<script>
+const BRIDGE = 'https://dezhsrzymylqpzdtymij.supabase.co/functions/v1/tg-bridge';
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg) { tg.ready(); tg.expand(); if (tg.MainButton) { tg.MainButton.setText('JOIN THE FLOOR'); tg.MainButton.onClick(() => tg.openTelegramLink('https://t.me/Smrtquickflips')); tg.MainButton.show(); } }
+const buzz = () => { try { tg && tg.HapticFeedback && tg.HapticFeedback.impactOccurred('light'); } catch(e){} };
+document.getElementById('join').addEventListener('click', buzz);
+document.getElementById('os').addEventListener('click', buzz);
+
+/* ---- AdsGram slot: tap to show a network ad. Reward/clicks accrue in your
+   AdsGram dashboard. No block ID yet → the slot explains itself, nothing breaks. */
+const adSlot = document.getElementById('ad-slot');
+let adCtl = null;
+function initAd() {
+  if (!/^[\w-]{4,}$/.test(ADSGRAM_BLOCK_ID) || ADSGRAM_BLOCK_ID.indexOf('PASTE') === 0) {
+    adSlot.innerHTML = 'AD SPACE — sponsor the Syndicate (or wire your AdsGram block ID)';
+    return;
+  }
+  try {
+    adCtl = window.Adsgram.init({ blockId: ADSGRAM_BLOCK_ID });
+    adSlot.innerHTML = '📺 TAP TO SUPPORT — watch a short ad, keep the desk free';
+    adSlot.style.cursor = 'pointer';
+    adSlot.onclick = () => {
+      buzz();
+      adSlot.innerHTML = 'Loading ad…';
+      adCtl.show().then((r) => {
+        if (r && r.done) { adSlot.innerHTML = '✅ Thanks — you keep the lights on.'; try { tg && tg.HapticFeedback && tg.HapticFeedback.notificationOccurred('success'); } catch(e){} }
+        else { adSlot.innerHTML = '📺 TAP TO SUPPORT — watch a short ad, keep the desk free'; }
+      }).catch(() => { adSlot.innerHTML = '📺 TAP TO SUPPORT — watch a short ad, keep the desk free'; });
+    };
+  } catch (e) { /* slot stays as-is */ }
+}
+if (document.readyState === 'complete') initAd(); else addEventListener('load', initAd);
+
+const fmt = (p) => { p = Number(p); if (!isFinite(p)) return '—'; return p >= 1 ? p.toFixed(4) : p.toPrecision(3); };
+async function loadTape() {
+  try {
+    const r = await fetch(BRIDGE + '?action=tape_data', { signal: AbortSignal.timeout(6000) });
+    const j = await r.json();
+    const t = j.tokens || {};
+    const el = document.getElementById('tape');
+    el.innerHTML = Object.entries(t).map(([sym, d]) => {
+      const ch = Number(d.chg24 || 0);
+      return `<div class="tok"><div class="sym">${sym}</div>` +
+        `<div class="px">$${fmt(d.price)}</div>` +
+        `<div class="ch ${ch >= 0 ? 'up' : 'dn'}">${ch >= 0 ? '▲' : '▼'} ${Math.abs(ch).toFixed(1)}% 24h · $${(Number(d.liq) || 0).toFixed(0)} liq</div></div>`;
+    }).join('') || '<div class="none">Tape offline — try again soon.</div>';
+  } catch (e) { /* keep last render */ }
+}
+async function loadCalls() {
+  try {
+    const r = await fetch(BRIDGE + '?action=calls_data', { signal: AbortSignal.timeout(6000) });
+    const j = await r.json();
+    const open = (j.open || j.calls || []).slice(0, 6);
+    document.getElementById('calls').innerHTML = open.length
+      ? open.map(c => `<div class="call"><span><span class="dir ${String(c.dir).toUpperCase() === 'UP' ? 'up' : 'dn'}">${String(c.dir).toUpperCase()}</span> ${c.sym || c.token || ''}</span><span class="meta">@${c.by || c.user || 'floor'} · ${c.ago || ''}</span></div>`).join('')
+      : '<div class="none">No open calls — the floor decides the next one. Calls live in the group.</div>';
+  } catch (e) { /* keep */ }
+}
+loadTape(); loadCalls();
+setInterval(loadTape, 30000);
+setInterval(loadCalls, 60000);
+</script>
+</body>
+</html>
