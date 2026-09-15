@@ -107,7 +107,7 @@
   .flipres.lose { color: var(--dn); }
   .callrow { display: flex; gap: 8px; margin-top: 12px; }
 
-  /* farm — rig rack */
+  /* the desk — trading floor seats */
   .racks { margin-top: 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); padding: 10px; }
   .rig { display: flex; align-items: center; gap: 9px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 4px; background: var(--surface2); margin-bottom: 6px; }
   .rig:last-child { margin-bottom: 0; }
@@ -228,29 +228,29 @@
     </div>
   </section>
 
-  <!-- ============ FARM ============ -->
+  <!-- ============ THE DESK ============ -->
   <section class="panel" id="p-farm">
-    <div class="wm">Farm</div>
+    <div class="wm">Desk</div>
     <div class="stats" style="margin-top:8px">
-      <div class="stat"><div class="n" id="fm-rate">0</div><div class="l">SMC / day</div></div>
-      <div class="stat"><div class="n" id="fm-power">0</div><div class="l">Power</div></div>
-      <div class="stat"><div class="n" id="fm-lvl">1</div><div class="l">Rig Lv</div></div>
+      <div class="stat"><div class="n" id="fm-rate">0</div><div class="l">Profit / day</div></div>
+      <div class="stat"><div class="n" id="fm-power">0</div><div class="l">Capital</div></div>
+      <div class="stat"><div class="n" id="fm-lvl">1</div><div class="l">Tier</div></div>
     </div>
-    <div class="racks" id="fm-racks"><div class="empty">Polling the racks…</div></div>
-    <div class="minilbl">Rig level — lifetime SMC mined</div>
+    <div class="racks" id="fm-racks"><div class="empty">Opening the trading floor…</div></div>
+    <div class="minilbl">Desk tier — lifetime P&L</div>
     <div class="lvlbar"><i id="fm-lvlbar" style="width:0%"></i></div>
     <div class="note" id="fm-lvlnote">—</div>
     <div class="farmvault">
       <div class="num" id="fm-claimable">0.0000</div>
-      <div class="cap">unclaimed yield · SMC</div>
+      <div class="cap">unbooked P&L · SMC</div>
       <div class="note" id="fm-boostline" style="margin-top:4px"></div>
     </div>
     <div class="btnrow">
-      <button class="btn" id="fm-claim" disabled>CLAIM</button>
+      <button class="btn" id="fm-claim">COLLECT</button>
     </div>
     <div id="fm-empty" style="display:none">
-      <div class="empty">No rigs online. Hash power comes from LP Desk shares — pool SMC into the LP DESK to spin up your first rig.</div>
-      <div class="btnrow" style="margin-top:2px"><button class="btn ghost" id="fm-goto-lp">OPEN LP DESK</button></div>
+      <div class="empty">No capital on the desk. Buying power comes from LP Desk shares — pool SMC into the LP DESK to take your seat. Your traders work the book while you sleep.</div>
+      <div class="btnrow" style="margin-top:2px"><button class="btn ghost" id="fm-goto-lp">FUND THE DESK</button></div>
     </div>
     <div class="note" id="fm-maint"></div>
   </section>
@@ -296,7 +296,7 @@
 <nav>
   <button class="on" data-tab="vault"><span class="ic">▤</span>Vault</button>
   <button data-tab="floor"><span class="ic">◐</span>Floor</button>
-  <button data-tab="farm"><span class="ic">⛏</span>Farm</button>
+  <button data-tab="farm"><span class="ic">💼</span>Desk</button>
   <button data-tab="lp"><span class="ic">⬡</span>LP Desk</button>
   <button data-tab="tape"><span class="ic">≋</span>Tape</button>
 </nav>
@@ -502,17 +502,34 @@ async function lpOp(op) {
 document.getElementById('lp-dep').addEventListener('click', () => lpOp('deposit'));
 document.getElementById('lp-wd').addEventListener('click', () => lpOp('withdraw'));
 
-/* ---------- farm — mining rigs fed by LP Desk power ---------- */
+/* ---------- the desk — your trading seat, capital from LP Desk shares ---------- */
 let FARM = null, farmClaimShown = 0, farmRateSec = 0;
-const FARM_LEVELS = [0, 1000, 10000, 50000, 250000]; // lifetime SMC mined → rig level 1..5
+const FARM_LEVELS = [0, 1000, 10000, 50000, 250000]; // lifetime P&L SMC -> tier 1..5
+const DESK_TIERS = ['JUNIOR TRADER', 'ANALYST', 'SENIOR TRADER', 'PM', 'PARTNER'];
+const DESK_TRADERS = [
+  { name: 'KODA', book: ['LONG', 'SMRT'] },
+  { name: 'TAURON', book: ['SCALP', 'SMC'] },
+  { name: 'ZORAN', book: ['SWING', 'SMF'] },
+  { name: 'NOVA', book: ['LONG', 'SMRT'] },
+  { name: 'ORACLE', book: ['ARBITRAGE', 'SOL'] },
+];
 function renderRacks(j) {
   const lvl = Math.max(1, Math.min(5, Number(j.level) || 1));
   const power = Number(j.power) || 0;
   let html = '';
-  for (let i = 1; i <= 5; i++) {
-    const on = i <= lvl && power > 0;
-    const load = on ? (68 + ((i * 37 + Math.floor(power)) % 29)) + '% LOAD' : (i <= lvl ? 'IDLE' : 'LOCKED');
-    html += `<div class="rig${on ? '' : ' off'}"><span class="led"></span><span class="rlabel">RIG-0${i}</span><span class="rload">${load}</span></div>`;
+  for (let i = 0; i < 5; i++) {
+    const on = i < lvl && power > 0;
+    const t = DESK_TRADERS[i];
+    if (on) {
+      const pnl = (1.2 + ((i * 37 + Math.floor(power)) % 48) / 10).toFixed(1);
+      const tag = t.book[0] + ' ' + t.book[1] + ' · +' + pnl + '%';
+      html += `<div class="rig"><span class="led"></span><span class="rlabel">SEAT-0${i + 1} · ${t.name}</span><span class="rload">${tag}</span></div>`;
+    } else if (i < lvl) {
+      html += `<div class="rig off"><span class="led"></span><span class="rlabel">SEAT-0${i + 1} · ${t.name}</span><span class="rload">FLAT</span></div>`;
+    } else {
+      const lockLbl = i >= 3 ? 'PARTNER SEAT' : 'LOCKED — FUND VIA LP DESK';
+      html += `<div class="rig off"><span class="led"></span><span class="rlabel">SEAT-0${i + 1}</span><span class="rload">${lockLbl}</span></div>`;
+    }
   }
   document.getElementById('fm-racks').innerHTML = html;
 }
@@ -523,38 +540,38 @@ function paintFarm(j) {
   document.getElementById('fm-power').textContent = fmtN(j.power);
   document.getElementById('fm-lvl').textContent = lvl;
   renderRacks(j);
-  // level progress
+  // tier progress
   const bar = document.getElementById('fm-lvlbar');
   const note = document.getElementById('fm-lvlnote');
-  if (lvl >= 5) { bar.style.width = '100%'; note.textContent = 'MAX RIG — level 5 online, +25% power banked'; }
+  if (lvl >= 5) { bar.style.width = '100%'; note.textContent = 'PARTNER DESK — top tier, +25% capital efficiency'; }
   else {
     const cur = FARM_LEVELS[lvl - 1], next = FARM_LEVELS[lvl];
     const pct = Math.max(0, Math.min(100, (mined - cur) / (next - cur) * 100));
     bar.style.width = pct + '%';
-    note.textContent = fmtN(mined) + ' / ' + fmtN(next) + ' SMC lifetime → level ' + (lvl + 1) + ' (+5% power)';
+    note.textContent = fmtN(mined) + ' / ' + fmtN(next) + ' SMC lifetime P&L → ' + DESK_TIERS[lvl] + ' (+5% capital efficiency)';
   }
-  // vault + boost + maintenance
+  // P&L drawer + boost + desk fee
   farmClaimShown = Number(j.claimable) || 0;
   farmRateSec = (Number(j.rate_day) || 0) / 86400;
   document.getElementById('fm-claimable').textContent = farmClaimShown.toFixed(4);
   document.getElementById('fm-boostline').textContent = (Number(j.ref_boost) || 0) > 0
-    ? '⚡ referral boost +' + j.ref_boost + '% hash'
-    : 'boost: qualified referrals add hash power';
+    ? '⚡ referral boost +' + j.ref_boost + '% capital'
+    : 'boost: qualified referrals add desk capital';
   document.getElementById('fm-maint').textContent = (Number(j.maintenance_pct) || 0) > 0
-    ? 'maintenance ' + j.maintenance_pct + '% skimmed at claim — keeps the racks cool'
-    : 'power source: LP Desk shares · 5% more power per rig level';
+    ? 'desk fee ' + j.maintenance_pct + '% at collect — feeds the 75/15/10 pipeline'
+    : 'capital source: LP Desk shares · +5% efficiency per tier';
   const noPower = !(Number(j.power) > 0);
   document.getElementById('fm-empty').style.display = noPower ? 'block' : 'none';
   document.getElementById('fm-claim').disabled = farmClaimShown < 1;
 }
 async function refreshFarm() {
-  if (!initData) { document.getElementById('fm-racks').innerHTML = '<div class="empty">Open inside Telegram to see your farm.</div>'; return; }
+  if (!initData) { document.getElementById('fm-racks').innerHTML = '<div class="empty">Open inside Telegram to take your seat.</div>'; return; }
   const j = await call('farm', { op: 'status' });
   if (!j || !j.ok) return;
   FARM = j;
   paintFarm(j);
 }
-/* live ticker — vault counts up between polls at the mined rate */
+/* live ticker — unbooked P&L counts up between polls at the desk rate */
 setInterval(() => {
   if (!FARM || farmRateSec <= 0) return;
   farmClaimShown += farmRateSec;
@@ -571,15 +588,15 @@ document.getElementById('fm-claim').addEventListener('click', async () => {
     const j = await call('farm', { op: 'claim' });
     if (!j) return;
     if (j.ok) {
-      toast('⛏ +' + fmtN(j.claimed) + ' SMC banked' + ((Number(j.fee) || 0) > 0 ? ' (fee ' + fmtN(j.fee) + ')' : ''));
-      term('farm claim ✓ +' + fmtN(j.claimed) + ' smc');
+      toast('💼 +' + fmtN(j.claimed) + ' SMC booked to your vault' + ((Number(j.fee) || 0) > 0 ? ' (desk fee ' + fmtN(j.fee) + ')' : ''));
+      term('desk collect ✓ +' + fmtN(j.claimed) + ' smc');
       farmClaimShown = 0;
       refreshFarm(); refreshWallet();
     } else {
-      toast(strip(j.dm) || j.error || 'Nothing to claim yet.', false);
+      toast(strip(j.dm) || j.error || 'Nothing to book yet.', false);
       refreshFarm();
     }
-  } finally { busy = false; b.textContent = 'CLAIM'; }
+  } finally { busy = false; b.textContent = 'COLLECT'; }
 });
 document.getElementById('fm-goto-lp').addEventListener('click', () => {
   const b = document.querySelector('nav button[data-tab="lp"]');
