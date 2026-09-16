@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMARTZ Backup Decrypt — offline key recovery</title>
+<style>
+  :root { --bg:#0b0e11; --panel:#12161b; --line:#232a33; --txt:#e8eef4; --dim:#8b98a8; --grn:#3ddc84; --red:#ff5c5c; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--txt); font:15px/1.6 -apple-system,"Segoe UI",Roboto,sans-serif; display:flex; min-height:100vh; align-items:center; justify-content:center; padding:24px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; max-width:560px; width:100%; padding:28px; }
+  h1 { font-size:19px; margin:0 0 4px; letter-spacing:.4px; }
+  .sub { color:var(--dim); font-size:13px; margin-bottom:18px; }
+  label { display:block; font-size:12px; color:var(--dim); text-transform:uppercase; letter-spacing:1px; margin:14px 0 6px; }
+  textarea, input { width:100%; background:#0d1117; border:1px solid var(--line); border-radius:8px; color:var(--txt); padding:11px 12px; font:13px/1.5 ui-monospace,Consolas,monospace; word-break:break-all; }
+  textarea { min-height:88px; resize:vertical; }
+  button { margin-top:18px; width:100%; padding:13px; border:0; border-radius:9px; background:var(--grn); color:#06210f; font-weight:700; font-size:15px; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:default; }
+  #out { display:none; margin-top:20px; }
+  #key { background:#0d1117; border:1px solid var(--grn); border-radius:8px; padding:12px; font:13px/1.6 ui-monospace,Consolas,monospace; word-break:break-all; color:var(--grn); }
+  .steps { color:var(--dim); font-size:13px; margin-top:14px; padding-left:18px; }
+  .steps li { margin:4px 0; }
+  .warn { color:var(--red); font-size:13px; margin-top:14px; }
+  #err { color:var(--red); font-size:13px; margin-top:12px; display:none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>🔐 SMARTZ BACKUP DECRYPT</h1>
+  <div class="sub">Runs entirely in this tab. No server, no network calls — you can save this file and open it offline, forever.</div>
+
+  <label>Your backup blob (from /backup)</label>
+  <textarea id="blob" placeholder="smartzbk1...." autocomplete="off" spellcheck="false"></textarea>
+
+  <label>Your passphrase</label>
+  <input id="pass" type="password" placeholder="The one you chose in /backup" autocomplete="off">
+
+  <button id="go">DECRYPT MY KEY</button>
+  <div id="err"></div>
+
+  <div id="out">
+    <label>Your private key (base58 — 88 characters)</label>
+    <div id="key"></div>
+    <ol class="steps">
+      <li>Copy the key above.</li>
+      <li>Open Phantom → <b>Settings → Add/Connect Wallet → Import Private Key</b> (Solflare works too).</li>
+      <li>Your SMARTZ funds are now in a wallet only you control.</li>
+    </ol>
+    <div class="warn">Anyone with this key controls the funds. Never paste it into a website, a DM, or anywhere except your wallet app. Clear your clipboard after importing (copy anything else).</div>
+  </div>
+</div>
+
+<script>
+const B58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+function b58encode(u8) {
+  const digits = [0];
+  for (let i = 0; i < u8.length; i++) {
+    let carry = u8[i];
+    for (let j = 0; j < digits.length; j++) { carry += digits[j] << 8; digits[j] = carry % 58; carry = (carry / 58) | 0; }
+    while (carry) { digits.push(carry % 58); carry = (carry / 58) | 0; }
+  }
+  let s = '';
+  for (let i = 0; i < u8.length && !u8[i]; i++) s += '1';
+  for (let i = digits.length - 1; i >= 0; i--) s += B58[digits[i]];
+  return s;
+}
+const dec = (s) => Uint8Array.from(atob(s.trim()), c => c.charCodeAt(0));
+
+document.getElementById('go').onclick = async () => {
+  const err = document.getElementById('err'), out = document.getElementById('out'), keyEl = document.getElementById('key');
+  err.style.display = 'none'; out.style.display = 'none';
+  const blob = document.getElementById('blob').value.trim();
+  const pass = document.getElementById('pass').value;
+  const fail = (m) => { err.textContent = m; err.style.display = 'block'; };
+  if (!blob || !pass) return fail('Paste your blob and passphrase.');
+  const parts = blob.split('.');
+  if (parts.length !== 3 || parts[0] !== 'smartzbk1') return fail('Not a SMARTZ backup blob — it must start with "smartzbk1."');
+  try {
+    const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('smartz-backup-v1::' + pass));
+    const key = await crypto.subtle.importKey('raw', digest, { name: 'AES-GCM' }, false, ['decrypt']);
+    const sk = new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: dec(parts[1]) }, key, dec(parts[2])));
+    if (sk.length !== 64) return fail('Decoded key has wrong length — wrong passphrase or corrupted blob.');
+    keyEl.textContent = b58encode(sk);
+    out.style.display = 'block';
+  } catch (e) {
+    fail('Decryption failed — wrong passphrase or corrupted blob. (' + String(e.message || e).slice(0, 80) + ')');
+  }
+};
+</script>
+</body>
+</html>
