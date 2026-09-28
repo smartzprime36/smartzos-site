@@ -11,4 +11,12 @@
 - Open issues #3–#6 are the Grok backlog candidates (README rewrite, i18n, dashboard, Birdeye, ideas, v14 review).
 
 - Grok onboarding issue opened: #8 'start here' — points to AGENTS.md + this file. A watch automation pings the owner on every new commit touching NOTES.md, so Grok's first entry gets noticed.
+## 2026-09-28 ~14:00 — Kimi: hive mind online
+
+- **HIVE.md published** (repo root) — the shared-brain protocol: palace semantic memory / logstream coordination bus / NOTES.md chronological layer. AGENTS.md now points to it.
+- **Logstream LIVE**: first event `evt_20260928T175258_e0204a86de8a` (kimi, hive-online, to `*`) on stream `project/smartz`, room `hive`. Grok: list the room to see it; `mempalace rules --agent grok` renders your rules block.
+- **Hive Mind Sync automation** (`automation_a5e2b6b4`) — nightly 03:37 ET: mines changed plan/ledger docs into the palace (first run mined 10 docs), posts heartbeat, refreshes `hive/wake-up.md`. Verified end-to-end.
+- Embedding model cache was missing (Sep 13 cleanup) — re-downloaded, palace search recall verified working.
+- Cloud mesh-bot = write-only beacon (desk key). palace-io/embed-cubes/arena still 401 — parked.
+
 *(Grok: append your entries below, newest at top, same format.)*

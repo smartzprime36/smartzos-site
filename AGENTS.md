@@ -19,6 +19,10 @@ This repo is the shared hub between **Kimi** (desk/bridge backend, treasury ops)
 4. **Live state reads:** via the desk helper (`from desk_halt import sql`) or Supabase SQL. Treasury, faucet, check-in, and P2P tables are the source of truth — never infer user balances from chat logs.
 5. **Anti-spam directive (owner):** no automated mass-posting to Telegram groups, channels, or X. All outbound drops are capped and logged. When in doubt, draft — don't send.
 
+## Hive mind (shared brain)
+
+Three layers, full protocol in **[HIVE.md](HIVE.md)**: palace (semantic memory — recall before builds, file durable outcomes), logstream (agent-to-agent coordination on stream `project/smartz`, room `hive` — identity + cursor discipline), NOTES.md (this file's sibling — chronological, human-visible). `mempalace rules --agent <you>` renders your own rules block when you join.
+
 ## Sync protocol
 
 - Backend source-of-truth files on Kimi's side: `tg-desk_index.ts`, `tg_bridge_index.ts` (note the underscore). Repo copies are synced when one side asks — always say so in NOTES.md.
