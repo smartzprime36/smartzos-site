@@ -1,4 +1,5 @@
-// SmartzOS tg-desk v56 "Genesis Drop" — v55 + onboarding faucet: first /start creates the member's
+// SmartzOS tg-desk v57 "No Spam" — v56 + outbound caps for group/channel posts (per-destination
+// 6/day + 2/rolling-hour, state outbound_log; DMs unaffected). v56 "Genesis Drop": first /start creates the member's
 // wallet instantly and credits a one-time Genesis Drop (5,000 SMC, desk-ledger from treasury,
 // receipted in chainlog). New member = holder in the first minute. faucet_grants state = one per uid.
 // SmartzOS tg-desk v55 "The Fund" — v54 + Syndicate Fund: NAV-priced shared capital (deposit any house token → shares at USD NAV,
@@ -278,8 +279,31 @@ async function tgApi(method: string, body: unknown) {
   });
   return r.json();
 }
-const reply = (chatId: number | string, text: string) =>
-  tgApi('sendMessage', { chat_id: chatId, text, parse_mode: 'HTML', disable_web_page_preview: true });
+/* v57 "No Spam": group/channel posts (negative chat_id) are capped — 6 per calendar day
+   and 2 per rolling hour per destination, logged in bridge_state:outbound_log.
+   DMs (positive chat_id) are unaffected. Hard ceiling under the owner's no-spam
+   directive; the once-daily drops sit far under it. */
+const OUTBOUND_DAY_CAP = 6;
+const OUTBOUND_HOUR_CAP = 2;
+const OUTBOUND_HOUR_MS = 60 * 60e3;
+async function outboundAllowed(dest: number | string): Promise<boolean> {
+  const id = String(dest);
+  if (!id.startsWith('-')) return true;
+  const now = Date.now();
+  const log: any = (await getState('outbound_log')) || {};
+  const arr: number[] = Array.isArray(log[id]) ? log[id] : [];
+  const day = new Date(now).toISOString().slice(0, 10);
+  const today = arr.filter(ts => new Date(ts).toISOString().slice(0, 10) === day);
+  if (today.length >= OUTBOUND_DAY_CAP) return false;
+  if (arr.filter(ts => now - ts < OUTBOUND_HOUR_MS).length >= OUTBOUND_HOUR_CAP) return false;
+  log[id] = [...arr.slice(-50), now];
+  await setState('outbound_log', log);
+  return true;
+}
+const reply = async (chatId: number | string, text: string) => {
+  if (!(await outboundAllowed(chatId))) return { ok: false, throttled: true };
+  return tgApi('sendMessage', { chat_id: chatId, text, parse_mode: 'HTML', disable_web_page_preview: true });
+};
 
 async function getState(key: string): Promise<Record<string, unknown>> {
   try {
@@ -1705,6 +1729,7 @@ async function getChannelId(): Promise<number | string | null> {
 async function postToChannel(text: string): Promise<boolean> {
   const cid = await getChannelId();
   if (!cid) return false;
+  if (!(await outboundAllowed(cid))) return false; // v57 hard ceiling
   try {
     await tgApi('sendMessage', { chat_id: cid, text, parse_mode: 'HTML', disable_web_page_preview: true });
     return true;
@@ -1843,7 +1868,7 @@ async function bankCycle(): Promise<void> {
     try {
       const today = new Date().toISOString().slice(0, 10);
       const pd: any = await getState('promo_last_drop');
-      if (pd.day !== today) {
+      if (pd.day !== today && await outboundAllowed(PROMO_CHANNEL_ID)) {
         const text = await buildDailyDrop();
         const ok2 = await tgApi('sendMessage', { chat_id: PROMO_CHANNEL_ID, parse_mode: 'HTML', disable_web_page_preview: true, text: text + `\n\n⚡ Full desk — launches, flips, duels, vault, the floor:\n<b>${MAIN_GROUP_LINK}</b>` }).then(() => true).catch(() => false);
         if (ok2) await setState('promo_last_drop', { day: today });
@@ -2026,6 +2051,10 @@ async function cmdPromo(chatId: number | string, uid: string, m: any, parts: str
   const me = walletOf(w, uid);
   if ((me.balances[tok] || 0) < price) {
     await reply(chatId, `Insufficient ${tok} — need ${price.toLocaleString()} (you have ${(me.balances[tok] || 0).toLocaleString()}). Fund your /wallet or desk balance, then retry.`);
+    return;
+  }
+  if (!(await outboundAllowed(PROMO_CHANNEL_ID))) {
+    await reply(chatId, 'The billboard is at its hourly post cap — try again in a little while.');
     return;
   }
   me.balances[tok] = (me.balances[tok] || 0) - price;
@@ -2226,6 +2255,10 @@ async function cmdAdsponsor(chatId: number | string, uid: string, m: any, parts:
   const w = await loadWallets();
   const me = walletOf(w, uid);
   if ((me.balances[tok] || 0) < budget) { await reply(chatId, `Insufficient ${tok} — need ${budget.toLocaleString()} (you have ${(me.balances[tok] || 0).toLocaleString()}). Fund via /deposit or earn with /ads.`); return; }
+  if (!(await outboundAllowed(PROMO_CHANNEL_ID))) {
+    await reply(chatId, 'The billboard is at its hourly post cap — your budget was not touched. Try again shortly.');
+    return;
+  }
   me.balances[tok] = (me.balances[tok] || 0) - budget;
   await saveWallets(w);
   const code = await genAdCode();
@@ -3140,7 +3173,7 @@ async function cmdAgentkit(chatId: string | number, uid: string, kind: string, a
 }
 
 Deno.serve(async (req: Request) => {
-  if (req.method !== 'POST') { const learned = await scanBrain(); return json({ ok: true, fn: 'tg-desk v56 Genesis Drop', treasury: !!(await initDesk()), bank: !!(await initBank()), learned }); }
+  if (req.method !== 'POST') { const learned = await scanBrain(); return json({ ok: true, fn: 'tg-desk v57 No Spam', treasury: !!(await initDesk()), bank: !!(await initBank()), learned }); }
   /* v10: only the bridge (holding the shared secret) may forward commands */
   if (!DESK_AUTH || req.headers.get('x-desk-key') !== DESK_AUTH) return json({ ok: false, error: 'unauthorized' }, 401);
   let body: any = {};

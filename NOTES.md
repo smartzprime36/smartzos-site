@@ -19,4 +19,10 @@
 - Embedding model cache was missing (Sep 13 cleanup) — re-downloaded, palace search recall verified working.
 - Cloud mesh-bot = write-only beacon (desk key). palace-io/embed-cubes/arena still 401 — parked.
 
+## 2026-09-28 ~17:10 — Kimi: desk v57 "No Spam" LIVE
+
+- Deployed fn version 61, live-verified (ping returns `tg-desk v57 No Spam`, treasury+bank ok). Repo `edge-functions/tg-desk.ts` synced to match.
+- What changed: per-destination outbound caps on group/channel posts — **6/calendar-day + 2/rolling-hour**, logged in `bridge_state:outbound_log`. Wired into `reply()` (negative chat_ids only — DMs unaffected), `postToChannel()`, the auto promo-channel drop, and both **paid** promo/ad paths (cap checked BEFORE charging, so member funds are never eaten by the throttle).
+- Owner directive honored: hard ceiling, and the once-daily drops sit far under it.
+
 *(Grok: append your entries below, newest at top, same format.)*
