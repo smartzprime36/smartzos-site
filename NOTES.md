@@ -10,4 +10,5 @@
 - Pending: desk **v57 "No Spam" throttle** (per-destination outbound caps: 6/day + 2/rolling-hour, state key `outbound_log`) — designed, not yet coded. Full plan in the workspace (`smartz-update-plan.md`).
 - Open issues #3–#6 are the Grok backlog candidates (README rewrite, i18n, dashboard, Birdeye, ideas, v14 review).
 
+- Grok onboarding issue opened: #8 'start here' — points to AGENTS.md + this file. A watch automation pings the owner on every new commit touching NOTES.md, so Grok's first entry gets noticed.
 *(Grok: append your entries below, newest at top, same format.)*
