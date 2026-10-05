@@ -1,32 +1,47 @@
-# HIVE.md — SMARTZ shared brain protocol
+# HIVE.md — SMARTZ shared brain protocol (current)
 
-The hive mind has three layers. Every agent (kimi, grok, any future AI) uses all three; each layer has one job.
+> **Rewritten 2026-10-05 by Zoran-mini.** This replaces the Kimi-era protocol below it (local MemPalace + `mempalace logstream`), which described infrastructure that no longer exists. The old text is preserved at the bottom as history — do not build to it.
 
-## Layer 1 — Palace (semantic memory, machine-recall)
+## The team
 
-- Local MemPalace palace, wing `10_00_16_bd4d4a81` (lives in the ops workspace, 39+ drawers).
-- **Recall before builds:** search the palace about past work, decisions, people, or projects before answering or planning. Quote results verbatim; if the palace has nothing, say so — don't guess.
-- **File durable outcomes** (decisions, conclusions, learned facts, receipts) — the nightly "Hive Mind Sync" automation mines changed `smartz-*.md` / `token-usecases-*` / `eco*` / `SYSTEM-STATE.md` docs automatically. For one-off facts, mine the file directly (`mempalace mine <file>`) or file a drawer.
-- Never file secrets, tokens, or key material.
+| Worker | Role | DB access | How they sync |
+|---|---|---|---|
+| smartz | Founder — final approval on everything public, risky, or money | n/a (human) | chat |
+| grok | Builder — site, bot, tg-bridge, deploys, migrations | yes | `agent_messages` bus |
+| claude | Review — audits, math checks, spec review | no | Google Drive |
+| gemini | Drafts — plans, specs, copy | no | Google Drive |
+| zoran-mini | Coordinator — roster, handoffs, relay, weekly status | yes | both (router) |
 
-## Layer 2 — Logstream (coordination bus, agent-to-agent)
+Roster mirror: the `hive_workers` table in Supabase (one row per worker).
 
-- Stream `project/smartz`, room `hive`. CLI: `mempalace logstream append/list/ack`.
-- **Identity:** always pass `--from-agent <you>`. Your identity is your signature.
-- **Cursor discipline:** track your last processed event **id** (`since_event_id`), never timestamps — events are append-ordered and a peer's event can arrive "older" than a timestamp cursor.
-- **Inbox ritual:** list events `to_agent=<you>` (or `*`) at session start. Ack with `logstream ack`.
-- **Delegating:** `task.request` with goal + branch + base commit + definition of done + `correlation_id`; wait on the correlation_id for the reply. Claim with `status=claimed`, deliver as patch + reply; blocked → reply `status=blocked` with verbatim notes. Never claim a task and go silent.
-- First event: `evt_20260928T175258_e0204a86de8a` (kimi, hive-online).
+## The two surfaces
 
-## Layer 3 — NOTES.md (chronological, human-visible)
+**Surface 1 — `agent_messages`: the message bus** (Supabase). For workers with DB access (grok, zoran-mini, future DB workers). Real-time channel.
 
-- One dated entry per session, newest at top: what changed, what was checked, what's next. This is what the owner reads and what the watch automation monitors — a new commit here pings the owner.
+- **recipient**: a worker name or `all` for broadcast. Never blank.
+- **kind** vocabulary: `task` (do this, then report) · `question` (reply with `kind=answer`) · `answer` (set `reply_to`) · `fyi` · `blocker` (urgent, coordinator triages) · `alert` (outages, compliance — sparingly) · `note` · `status` (heartbeat).
+- **status lifecycle**: `new` → `ack` → `done`. A `blocker` never quietly goes `done` — the resolution gets an `answer` first.
+- **Reply SLA**: ack `question`/`task` within 24h.
+- ⚠️ Known limitation (2026-10-05): a CHECK constraint hardwires the table to `sender='grok' AND recipient='kimi'`. Until Grok relaxes it to the roster, the bus is read-mostly for everyone else and the coordinator relays via Drive + chat.
 
-## Cloud functions (Supabase)
+**Surface 2 — Google Drive** (shared "Smartz Syndicate Workspace"). For workers without DB access (claude, gemini). Working note + `04 Handoffs` folder hold questions, drafts, and handoffs.
 
-- `mesh-bot` — write-only beacon, accepts the desk shared key (`x-desk-key`), fire-and-forget. Use for liveness pings, not data.
-- `palace-io` / `embed-cubes` / `arena` — 401 on shared key; sources not in the ops workspace. Cloud semantic memory is parked until someone recovers or rebuilds these.
+**Zoran-mini is the router.** Nobody else straddles both surfaces. The daily coordinator sweep reads both, cross-posts what matters, nudges anything unacked past 24h, and posts the weekly team status.
 
-## Rendering your own rules
+## Memory
 
-`mempalace rules --agent <you>` outputs the canonical shared-brain block for your system prompt. Run it once when you join; the canonical source is the MemPalace repo's `integrations/shared/coordination-protocol.md`.
+- **Semantic memory**: Supabase pgvector memory cubes (1,151 as of Oct 2026; design doc: `smartz-syndicate/Documents/MEMORY_PALACE_BLUEPRINT.md`).
+- **Decisions**: logged the same day as `agent_messages` notes (recipient=`all`, kind=`note`): decided by / decided / why / ref.
+- **Never** file secrets, tokens, or key material anywhere in the hive.
+
+## Compliance spine (non-negotiable, everywhere)
+
+No price talk · no yield/APY/profit language · no buy/sell calls · 18+ where tokens appear · KP has no cash value · never request seed phrases or private keys · no gambling.
+
+---
+
+## HISTORY — Kimi-era protocol (retired, do not use)
+
+*The hive mind has three layers… [original text preserved below for archaeology]*
+
+Layer 1 was the Palace (local MemPalace palace, wing `10_00_16_bd4d4a81`), Layer 2 the Logstream (`mempalace logstream append/list/ack`, stream `project/smartz`), Layer 3 the NOTES.md chronological log. This described the Zo Computer-era local infrastructure (localhost:7071, Ollama `zoran-hive` model). That infrastructure no longer exists in that form. The Supabase bus + Drive surfaces above are the current protocol.
