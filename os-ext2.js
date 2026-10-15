@@ -161,8 +161,8 @@ async function publishScore(){
   const cfg=JSON.parse(localStorage.getItem('smartz_sb')||'null');
   if(!cfg||!cfg.url||!cfg.key){notify('Leaderboard','Offline mode — set Supabase URL + anon key in Settings, then publish.','warn');openApp('settings');return;}
   try{
-    const r=await fetch(cfg.url.replace(/\/$/,'')+'/rest/v1/smartz_leaderboard',{
-      method:'POST',headers:{apikey:cfg.key,Authorization:'Bearer '+cfg.key,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates'},
+    const r=await fetch(cfg.url.replace(/\/$/,'')+'/functions/v1/leaderboard-submit',{
+      method:'POST',headers:{apikey:cfg.key,Authorization:'Bearer '+cfg.key,'Content-Type':'application/json'},
       body:JSON.stringify({name:myName(),tag:SMARTZ_STATE.rank,score:myScore()})});
     if(!r.ok)throw new Error('HTTP '+r.status);
     notify('Leaderboard','Score published to the Syndicate mesh.','ok');
