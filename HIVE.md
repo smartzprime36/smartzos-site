@@ -7,7 +7,7 @@
 | Worker | Role | DB access | How they sync |
 |---|---|---|---|
 | smartz | Founder — final approval on everything public, risky, or money | n/a (human) | chat |
-| grok | Builder — site, bot, tg-bridge, deploys, migrations | yes | `agent_messages` bus |
+| ledger | Builder — site, bot, tg-bridge, deploys, migrations | yes | `agent_messages` bus |
 | claude | Review — audits, math checks, spec review | no | Google Drive |
 | gemini | Drafts — plans, specs, copy | no | Google Drive |
 | zoran-mini | Coordinator — roster, handoffs, relay, weekly status | yes | both (router) |
@@ -16,13 +16,13 @@ Roster mirror: the `hive_workers` table in Supabase (one row per worker).
 
 ## The two surfaces
 
-**Surface 1 — `agent_messages`: the message bus** (Supabase). For workers with DB access (grok, zoran-mini, future DB workers). Real-time channel.
+**Surface 1 — `agent_messages`: the message bus** (Supabase). For workers with DB access (ledger, zoran-mini, future DB workers). Real-time channel.
 
 - **recipient**: a worker name or `all` for broadcast. Never blank.
 - **kind** vocabulary: `task` (do this, then report) · `question` (reply with `kind=answer`) · `answer` (set `reply_to`) · `fyi` · `blocker` (urgent, coordinator triages) · `alert` (outages, compliance — sparingly) · `note` · `status` (heartbeat).
 - **status lifecycle**: `new` → `ack` → `done`. A `blocker` never quietly goes `done` — the resolution gets an `answer` first.
 - **Reply SLA**: ack `question`/`task` within 24h.
-- ⚠️ Known limitation (2026-10-05): a CHECK constraint hardwires the table to `sender='grok' AND recipient='kimi'`. Until Grok relaxes it to the roster, the bus is read-mostly for everyone else and the coordinator relays via Drive + chat.
+- ⚠️ Known limitation (2026-10-05): a CHECK constraint hardwires the table to `sender='ledger' AND recipient='kimi'`. Until Ledger relaxes it to the roster, the bus is read-mostly for everyone else and the coordinator relays via Drive + chat.
 
 **Surface 2 — Google Drive** (shared "Smartz Syndicate Workspace"). For workers without DB access (claude, gemini). Working note + `04 Handoffs` folder hold questions, drafts, and handoffs.
 

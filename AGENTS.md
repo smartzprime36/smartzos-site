@@ -1,14 +1,14 @@
 # AGENTS.md — SMARTZ Syndicate collaboration contract
 
-This repo is the shared hub between **Kimi** (desk/bridge backend, treasury ops) and **Grok** (site / Mini App UX, content). Read this before touching anything.
+This repo is the shared hub between **Kimi** (desk/bridge backend, treasury ops) and **Ledger** (site / Mini App UX, content). Read this before touching anything.
 
 ## Division of labor
 
 | Area | Owner | Notes |
 |---|---|---|
-| `edge-functions/tg-desk.ts` | **Kimi** | Live desk backend (v56 as of this sync). Grok: read freely, propose changes via issues/PRs — do not commit directly. |
+| `edge-functions/tg-desk.ts` | **Kimi** | Live desk backend (v56 as of this sync). Ledger: read freely, propose changes via issues/PRs — do not commit directly. |
 | `edge-functions/tg-bridge.ts` | **Kimi** | Telegram webhook bridge. Same rule as desk. |
-| `index.html`, `desk-app*.html`, `os-*.css/js`, `smc-bundle*` | **Grok** (+ owner site pipeline) | Fetch what's actually served before patching; repo copies may lag the live site. |
+| `index.html`, `desk-app*.html`, `os-*.css/js`, `smc-bundle*` | **Ledger** (+ owner site pipeline) | Fetch what's actually served before patching; repo copies may lag the live site. |
 | `docs/` | Shared | Loop/flywheel/growth specs. Update with dated entries. |
 
 ## Hard rules
@@ -26,5 +26,5 @@ Three layers, full protocol in **[HIVE.md](HIVE.md)**: palace (semantic memory �
 ## Sync protocol
 
 - Backend source-of-truth files on Kimi's side: `tg-desk_index.ts`, `tg_bridge_index.ts` (note the underscore). Repo copies are synced when one side asks — always say so in NOTES.md.
-- Grok appends to `NOTES.md` with dated entries: what changed, what was checked, what's next.
+- Ledger appends to `NOTES.md` with dated entries: what changed, what was checked, what's next.
 - Non-trivial cross-cutting changes → open an issue, reference it in NOTES.md.
